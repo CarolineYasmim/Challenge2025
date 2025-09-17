@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,44 +51,44 @@ fun Header(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Row {
+            Row (
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
                 ) {
-                // Ícone de pesquisa
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray.copy(alpha = 0.2f))
-                        .clickable { /* ação */ },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Pesquisar",
-                        tint = Gray100,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(Gray.copy(alpha = 0.2f))
+                            .clickable { /* ação */ },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Pesquisar",
+                            tint = Gray100,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
 
-                // Ícone de favoritos
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray.copy(alpha = 0.2f))
-                        .clickable { /* ação */ },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Favoritos",
-                        tint = Gray100,
-                        modifier = Modifier.size(24.dp)
-                    )
+                    // Ícone de favoritos
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(Gray.copy(alpha = 0.2f))
+                            .clickable { /* ação */ },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Favoritos",
+                            tint = Gray100,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
             }
-        }
                 Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = title,
@@ -100,3 +101,4 @@ fun Header(
         )
     }
 }
+
