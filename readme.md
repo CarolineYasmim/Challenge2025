@@ -145,7 +145,7 @@ Se você nunca fez integração antes, recomendo começar por aqui:
 
 ## 💡 Observação Final
 
-Toda a UI já está pronta e **desacoplada da fonte de dados**.
+Toda a UI está sendo preparada e **desacoplada da fonte de dados**.
 Isso significa que a integração exigirá **poucas mudanças na UI** — o foco será apenas em:
 
 * Implementar os serviços de rede
