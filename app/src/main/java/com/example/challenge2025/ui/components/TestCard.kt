@@ -1,7 +1,11 @@
 package com.example.challenge2025.ui.components
 
+
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,24 +28,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.challenge2025.model.TestItem
-import com.example.challenge2025.model.TestStatus
+import com.example.challenge2025.model.tests.TestItem
+import com.example.challenge2025.model.tests.TestStatus
 
 @Composable
 fun TestCard(
     testItem: TestItem,
     onClick: (TestItem) -> Unit
 ) {
+    val isLight = !isSystemInDarkTheme()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-
-            // função para poder ir para a pagina dos testes
-
-            .clickable { onClick(testItem) },
-
+            .padding(vertical = 6.dp)
+            .clickable { onClick(testItem) }
+            .then(
+                if (isLight) Modifier.border(
+                    BorderStroke(1.dp, Color.Black),
+                    shape = RoundedCornerShape(12.dp)
+                ) else Modifier
+            ),
         shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isLight) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -50,7 +61,6 @@ fun TestCard(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Ícone ou ilustração
             Image(
                 painter = painterResource(id = testItem.iconRes),
                 contentDescription = testItem.title,
@@ -59,7 +69,6 @@ fun TestCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Coluna com título, descrição, status e duração
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = testItem.title,
@@ -74,7 +83,6 @@ fun TestCard(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Status do teste
                 if (testItem.status == TestStatus.TODO) {
                     Text(
                         text = "A fazer",
@@ -83,13 +91,12 @@ fun TestCard(
                     )
                 } else {
                     Text(
-                        text = "Último resultado: 12/09/2025", // mock
+                        text = "Último resultado: 12/09/2025",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
 
-                // Duração
                 Text(
                     text = "${testItem.durationMinutes} min",
                     style = MaterialTheme.typography.bodySmall,
@@ -97,12 +104,11 @@ fun TestCard(
                 )
             }
 
-            // Check de feito
             if (testItem.status == TestStatus.DONE) {
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = "Feito",
-                    tint = Color(0xFF4CAF50), // Verde
+                    tint = Color(0xFF4CAF50),
                     modifier = Modifier.size(24.dp)
                 )
             }

@@ -2,15 +2,15 @@ package com.example.challenge2025.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Grays para light/dark
+val GrayLight = Color(0xFFE0E0E0)
+val GrayDark = Color(0xFF424242)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+// Cores do app
+val Orange = Color(0xFFF49E4C)
+val Blue = Color(0xFF7584FA)
+val Green = Color(0xFF81F495)
 
-val Gray100 = Color(color=0xFFFDFCFE)
-
-val Gray = Color(color = 0xFFD9D9D9)
-
+// Outros tons (opcional, para Material3)
+val White = Color(0xFFFFFFFF)
+val Black = Color(0xFF000000)

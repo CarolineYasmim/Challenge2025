@@ -1,4 +1,6 @@
-package com.example.challenge2025.model
+package com.example.challenge2025.model.tests
+
+import com.example.challenge2025.model.data.MockData
 
 data class TestDetail(
     val testId: String,

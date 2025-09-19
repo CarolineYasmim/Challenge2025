@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
-import com.example.challenge2025.ui.theme.Gray100
+import androidx.compose.material3.MaterialTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -26,7 +26,7 @@ fun BannerCarousel(
 ) {
     val pagerState = rememberPagerState(
         initialPage = 0,
-        pageCount = { bannerImages.size}
+        pageCount = { bannerImages.size }
     )
 
     val coroutineScope = rememberCoroutineScope()
@@ -41,6 +41,8 @@ fun BannerCarousel(
         }
     }
 
+    val indicatorColor = MaterialTheme.colorScheme.onSurface
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -52,7 +54,6 @@ fun BannerCarousel(
                 .fillMaxWidth()
                 .height(180.dp),
             pageSpacing = 16.dp,
-            contentPadding = PaddingValues(horizontal = 16.dp)
         ) { page ->
             Image(
                 painter = painterResource(id = bannerImages[page]),
@@ -65,7 +66,6 @@ fun BannerCarousel(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -81,11 +81,11 @@ fun BannerCarousel(
                         .padding(4.dp)
                         .then(
                             if (isSelected) {
-                                Modifier.background(Gray100, CircleShape)
+                                Modifier.background(indicatorColor, CircleShape)
                             } else {
                                 Modifier.border(
                                     width = 2.dp,
-                                    color = Gray100,
+                                    color = indicatorColor,
                                     shape = CircleShape
                                 )
                             }

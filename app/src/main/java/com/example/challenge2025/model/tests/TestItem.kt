@@ -1,4 +1,4 @@
-package com.example.challenge2025.model
+package com.example.challenge2025.model.tests
 
 data class TestItem(
     val id: String,

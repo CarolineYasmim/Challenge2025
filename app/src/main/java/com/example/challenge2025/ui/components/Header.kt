@@ -15,24 +15,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.challenge2025.ui.theme.Gray100
+import com.example.challenge2025.model.user.User
 
 @Composable
 fun Header(
     title: String,
-    avatarRes: Int,
+    user: User,
     modifier: Modifier = Modifier
 ) {
+    val backgroundIconColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+    val iconTint = MaterialTheme.colorScheme.onSurface
+    val textColor = MaterialTheme.colorScheme.onSurface
+
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 60.dp, bottom = 16.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 16.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -41,7 +44,7 @@ fun Header(
         ) {
 
             Image(
-                painter = painterResource(id = avatarRes),
+                painter = painterResource(id = user.avatarRes),
                 contentDescription = "Avatar do usuário",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -51,54 +54,56 @@ fun Header(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Row (
+            Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(Gray.copy(alpha = 0.2f))
-                            .clickable { /* ação */ },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Pesquisar",
-                            tint = Gray100,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
+            ) {
 
-                    // Ícone de favoritos
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(Gray.copy(alpha = 0.2f))
-                            .clickable { /* ação */ },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Favorite,
-                            contentDescription = "Favoritos",
-                            tint = Gray100,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(backgroundIconColor)
+                        .clickable {  },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Pesquisar",
+                        tint = iconTint,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
+
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(backgroundIconColor)
+                        .clickable { },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "Favoritos",
+                        tint = iconTint,
+                        modifier = Modifier.size(24.dp)
+                    )
                 }
             }
-                Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium.copy(
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold
             ),
-            color = Gray100,
+            color = textColor,
             modifier = Modifier.padding(top = 12.dp)
         )
     }
 }
-
