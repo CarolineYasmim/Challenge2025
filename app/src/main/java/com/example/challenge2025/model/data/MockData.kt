@@ -19,7 +19,7 @@ object MockData {
             5,
             TestStatus.TODO,
             TestCategory.USER,
-            R.drawable.ic_anxiety
+            R.drawable.ic_burnout
         ),
         TestItem(
             "2",

@@ -15,18 +15,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.challenge2025.ui.components.BottomBar
-import com.example.challenge2025.ui.screens.Dashboard.DashboardScreen
-import com.example.challenge2025.ui.screens.HomeScreen
-import com.example.challenge2025.ui.screens.MenuScreen
-import com.example.challenge2025.ui.screens.Tests.TestDescriptionScreen
-import com.example.challenge2025.ui.screens.Tests.TestQuestionScreen
-import com.example.challenge2025.ui.screens.Tests.TestResultScreen
-import com.example.challenge2025.ui.screens.Tests.TestsScreen
-import com.example.challenge2025.ui.theme.Challenge2025Theme
-import com.example.challenge2025.viewmodel.TestViewModel
 import com.example.challenge2025.model.tests.TestItem
+import com.example.challenge2025.ui.components.BottomBar
+import com.example.challenge2025.ui.screens.MenuScreen
+import com.example.challenge2025.ui.screens.dashboard.DashboardScreen
+import com.example.challenge2025.ui.screens.home.CheckinScreen
+import com.example.challenge2025.ui.screens.home.HomeScreen
+import com.example.challenge2025.ui.screens.tests.TestDescriptionScreen
+import com.example.challenge2025.ui.screens.tests.TestQuestionScreen
+import com.example.challenge2025.ui.screens.tests.TestResultScreen
+import com.example.challenge2025.ui.screens.tests.TestsScreen
+import com.example.challenge2025.ui.theme.Challenge2025Theme
 import com.example.challenge2025.viewmodel.CalendarViewModel
+import com.example.challenge2025.viewmodel.CheckinViewModel
+import com.example.challenge2025.viewmodel.TestViewModel
+import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +41,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val testViewModel: TestViewModel = viewModel()
                     val calendarViewModel: CalendarViewModel = viewModel()
+                    val checkinViewModel: CheckinViewModel = viewModel() // <<< CORRIGIDO: ViewModel instanciado
 
                     // Rotas principais onde a BottomBar deve aparecer
                     val bottomBarRoutes = listOf("home", "tests", "dashboard", "menu")
@@ -57,13 +61,27 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(innerPadding)
                         ) {
                             /** Rotas principais com BottomBar **/
-                            composable("home") { HomeScreen(
-                                navController = navController,
-                                calendarViewModel = calendarViewModel
-                            ) }
+                            composable("home") {
+                                // <<< CORRIGIDO: Chamada de função com sintaxe correta
+                                HomeScreen(
+                                    navController = navController,
+                                    calendarViewModel = calendarViewModel
+                                )
+                            }
 
-                            // Aqui passamos uma lambda para TestsScreen,
-                            // para que ao clicar em um card ele navegue para a tela interna sem BottomBar
+                            composable("checkin/{date}") { backStackEntry ->
+                                val dateString = backStackEntry.arguments?.getString("date")
+                                    ?: LocalDate.now().toString()
+                                val date = LocalDate.parse(dateString)
+
+                                CheckinScreen(
+                                    date = date,
+                                    viewModel = checkinViewModel, // <<< CORRIGIDO: Referência agora existe
+                                    onClose = { navController.popBackStack() },
+                                    onSubmit = { navController.popBackStack() }
+                                )
+                            }
+
                             composable("tests") {
                                 TestsScreen { testItem: TestItem ->
                                     navController.navigate("testDescription/${testItem.id}")
@@ -125,12 +143,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-/**
-Resumo de como funciona:
-
-- As rotas listadas em `bottomBarRoutes` terão a BottomBar visível.
-- `TestsScreen` recebe uma lambda `(TestItem) -> Unit`, para que ao clicar em um card, o app navegue para `TestDescriptionScreen`.
-- As telas internas (`TestDescriptionScreen`, `TestQuestionScreen`, `TestResultScreen`) não estão em `bottomBarRoutes`, então a BottomBar desaparece automaticamente.
-- Navegação entre screens internas continua usando `navController.navigate()` e `popBackStack()`.
- **/

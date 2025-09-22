@@ -1,4 +1,4 @@
-package com.example.challenge2025.ui.screens.Dashboard
+package com.example.challenge2025.ui.screens.dashboard
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
