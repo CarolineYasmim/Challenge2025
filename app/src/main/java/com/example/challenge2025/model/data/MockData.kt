@@ -400,7 +400,11 @@ object MockData {
     val currentUser = User(
         id = "u1",
         name = "Yasmim",
-        avatarRes = R.drawable.avatar
+        avatarRes = R.drawable.avatar,
+        bannerRes = R.drawable.default_banner,
+        status = "Cuidando de mim",
+        description = "Apaixonada por mindfulness e café. Buscando equilíbrio um dia de cada vez.",
+        tags = listOf("Mindfulness", "Leitura", "Yoga")
     )
 
     fun updateTestStatus(testId: String, status: TestStatus) {

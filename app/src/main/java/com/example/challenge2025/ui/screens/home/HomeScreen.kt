@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.challenge2025.model.data.MockData
+import com.example.challenge2025.model.data.MockData.currentUser
 import com.example.challenge2025.model.data.MockHomeData
 import com.example.challenge2025.ui.components.CheckinHistory
 import com.example.challenge2025.ui.components.Header
@@ -20,11 +20,13 @@ import com.example.challenge2025.ui.components.SupportComponent
 import com.example.challenge2025.ui.components.WeeklyCalendar
 import com.example.challenge2025.ui.components.WeeklyGoals
 import com.example.challenge2025.viewmodel.CalendarViewModel
+import com.example.challenge2025.viewmodel.UserViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    calendarViewModel: CalendarViewModel = viewModel()
+    calendarViewModel: CalendarViewModel = viewModel(),
+    userViewModel: UserViewModel = viewModel()
 ) {
     val selectedDate = calendarViewModel.selectedDate.collectAsState()
     val currentWeek = calendarViewModel.currentWeek.collectAsState()
@@ -41,8 +43,8 @@ fun HomeScreen(
     ) {
         // AJUSTE: Modifiers de padding foram removidos dos componentes filhos.
         Header(
-            title = "Olá ${MockData.currentUser.name}",
-            user = MockData.currentUser
+            title = "Olá ${currentUser.name}",
+            user = currentUser
         )
 
         WeeklyCalendar(

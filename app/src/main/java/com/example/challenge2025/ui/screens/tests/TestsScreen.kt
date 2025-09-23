@@ -11,15 +11,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.challenge2025.R
 import com.example.challenge2025.model.data.MockData
+import com.example.challenge2025.model.data.MockData.currentUser
 import com.example.challenge2025.model.tests.TestCategory
 import com.example.challenge2025.model.tests.TestItem
 import com.example.challenge2025.ui.components.BannerCarousel
 import com.example.challenge2025.ui.components.Header
 import com.example.challenge2025.ui.components.TestListContainer
+import com.example.challenge2025.viewmodel.UserViewModel
 
 @Composable
 fun    TestsScreen(
-    onTestClick: (TestItem) -> Unit
+    onTestClick: (TestItem) -> Unit,
+    userViewModel: UserViewModel
 ) {
 
     Column(
@@ -28,7 +31,7 @@ fun    TestsScreen(
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
     ) {
-        Header(title = "Testes", user = MockData.currentUser)
+        Header(title = "Testes", user = currentUser)
         BannerCarousel(bannerImages = listOf(
             R.drawable.banner1,
             R.drawable.banner2,
