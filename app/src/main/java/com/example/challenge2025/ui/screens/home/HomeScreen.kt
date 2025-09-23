@@ -8,11 +8,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.challenge2025.model.data.MockData.currentUser
 import com.example.challenge2025.model.data.MockHomeData
 import com.example.challenge2025.ui.components.CheckinHistory
 import com.example.challenge2025.ui.components.Header
@@ -26,44 +26,42 @@ import com.example.challenge2025.viewmodel.UserViewModel
 fun HomeScreen(
     navController: NavController,
     calendarViewModel: CalendarViewModel = viewModel(),
-    userViewModel: UserViewModel = viewModel()
+    userViewModel: UserViewModel
 ) {
-    val selectedDate = calendarViewModel.selectedDate.collectAsState()
-    val currentWeek = calendarViewModel.currentWeek.collectAsState()
+    val selectedDate by calendarViewModel.selectedDate.collectAsState()
+    val currentWeek by calendarViewModel.currentWeek.collectAsState()
+    val currentUser by userViewModel.currentUser.collectAsState()
 
-    // AJUSTE: O padding foi movido para esta Column principal.
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            // 1. Padding de 16.dp em todos os lados da tela.
             .padding(16.dp),
-        // 2. Espaçamento vertical de 24.dp aplicado entre cada componente.
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // AJUSTE: Modifiers de padding foram removidos dos componentes filhos.
         Header(
             title = "Olá ${currentUser.name}",
             user = currentUser
         )
 
         WeeklyCalendar(
-            week = currentWeek.value,
-            selectedDate = selectedDate.value,
+            week = currentWeek,
+            selectedDate = selectedDate,
             onDateSelected = { date ->
                 calendarViewModel.selectDate(date)
-                // Aqui você pode chamar uma função para carregar os dados do backend para a data selecionada
             }
         )
 
         CheckinHistory(
-            selectedDate = selectedDate.value, // .value para passar LocalDate
+            selectedDate = selectedDate,
+            // CORREÇÃO: O nome do parâmetro foi ajustado para 'onCheckinClick'
             onCheckinClick = {
-                // Navegar para a tela de check-in com a data selecionada
-                navController.navigate("checkin/${selectedDate.value}")
+                navController.navigate("checkin/${selectedDate}")
             }
         )
 
+        // Nota: Se você renomeou o componente de 'WeeklyGoalsComponent' para 'WeeklyGoals',
+        // apenas ajuste o nome da chamada aqui.
         WeeklyGoals(
             mentalHealth = MockHomeData.mentalHealthSummary,
             careGoal = MockHomeData.careDaysGoal
@@ -73,7 +71,5 @@ fun HomeScreen(
             featuredResource = MockHomeData.featuredResource,
             quickActions = MockHomeData.quickActions
         )
-
-
     }
 }

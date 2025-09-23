@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -17,6 +18,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.challenge2025.ui.components.BottomBar
 import com.example.challenge2025.ui.screens.MenuScreen
+import com.example.challenge2025.ui.screens.auth.LoginScreen
+import com.example.challenge2025.ui.screens.auth.SignUpScreen
 import com.example.challenge2025.ui.screens.dashboard.DashboardScreen
 import com.example.challenge2025.ui.screens.home.CheckinScreen
 import com.example.challenge2025.ui.screens.home.HomeScreen
@@ -28,7 +31,7 @@ import com.example.challenge2025.ui.screens.tests.TestQuestionScreen
 import com.example.challenge2025.ui.screens.tests.TestResultScreen
 import com.example.challenge2025.ui.screens.tests.TestsScreen
 import com.example.challenge2025.ui.theme.Challenge2025Theme
-import com.example.challenge2025.viewmodel.CalendarViewModel
+import com.example.challenge2025.viewmodel.AuthViewModel
 import com.example.challenge2025.viewmodel.CheckinViewModel
 import com.example.challenge2025.viewmodel.TestViewModel
 import com.example.challenge2025.viewmodel.UserViewModel
@@ -40,21 +43,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Challenge2025Theme {
-                Surface(color = MaterialTheme.colorScheme.background) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ){
                     val navController = rememberNavController()
+                    // ViewModels
                     val testViewModel: TestViewModel = viewModel()
                     val userViewModel: UserViewModel = viewModel()
-                    val calendarViewModel: CalendarViewModel = viewModel()
-                    val checkinViewModel: CheckinViewModel = viewModel() // <<< CORRIGIDO: ViewModel instanciado
+                    val checkinViewModel: CheckinViewModel = viewModel()
+                    val authViewModel: AuthViewModel = viewModel()
 
-                    // As rotas principais onde a BottomBar deve aparecer
                     val mainAppRoutes = listOf("home", "tests", "dashboard", "menu")
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route
 
                     Scaffold(
                         bottomBar = {
-                            // A BottomBar só aparece se a rota atual estiver na lista de rotas principais
                             if (currentRoute in mainAppRoutes) {
                                 BottomBar(navController = navController)
                             }
@@ -65,39 +70,23 @@ class MainActivity : ComponentActivity() {
                             startDestination = "onboarding1",
                             modifier = Modifier.padding(innerPadding)
                         ) {
+                            /** Rotas de Onboarding, Auth e principais **/
                             composable("onboarding1") { OnboardingScreen1(navController) }
                             composable("onboarding2") { OnboardingScreen2(navController) }
                             composable("onboarding3") { OnboardingScreen3(navController) }
+                            composable("login") { LoginScreen(navController, authViewModel) }
+                            composable("signup") { SignUpScreen(navController, authViewModel) }
 
-                            /** Rotas principais com BottomBar **/
                             composable("home") {
-                                // <<< CORRIGIDO: Chamada de função com sintaxe correta
                                 HomeScreen(
                                     navController = navController,
-                                    userViewModel = userViewModel,
-                                    calendarViewModel = calendarViewModel
-
-                                )
-                            }
-
-                            composable("checkin/{date}") { backStackEntry ->
-                                val dateString = backStackEntry.arguments?.getString("date")
-                                    ?: LocalDate.now().toString()
-                                val date = LocalDate.parse(dateString)
-
-                                CheckinScreen(
-                                    date = date,
-                                    viewModel = checkinViewModel, // <<< CORRIGIDO: Referência agora existe
-                                    onClose = { navController.popBackStack() },
-                                    onSubmit = { navController.popBackStack() }
+                                    userViewModel = userViewModel
                                 )
                             }
 
                             composable("tests") {
                                 TestsScreen(
-                                    // 1. Passe a instância do ViewModel que você já tem
                                     userViewModel = userViewModel,
-                                    // 2. Passe a função de clique para o parâmetro 'onTestClick'
                                     onTestClick = { testItem ->
                                         navController.navigate("testDescription/${testItem.id}")
                                     }
@@ -105,13 +94,27 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable("dashboard") { DashboardScreen(navController) }
+
                             composable("menu") {
                                 MenuScreen(
-                                    navController,
+                                    navController = navController,
                                     userViewModel = userViewModel
-                                ) }
+                                )
+                            }
 
-                            /** Rotas internas SEM BottomBar **/
+                            /** Rotas internas **/
+                            // CORREÇÃO: Bloco "checkin" preenchido para usar o checkinViewModel
+                            composable("checkin/{date}") { backStackEntry ->
+                                val dateString = backStackEntry.arguments?.getString("date") ?: LocalDate.now().toString()
+                                val date = LocalDate.parse(dateString)
+                                CheckinScreen(
+                                    date = date,
+                                    viewModel = checkinViewModel,
+                                    onClose = { navController.popBackStack() },
+                                    onSubmit = { navController.popBackStack() }
+                                )
+                            }
+
                             composable("testDescription/{testId}") { backStackEntry ->
                                 val testId = backStackEntry.arguments?.getString("testId") ?: ""
                                 TestDescriptionScreen(

@@ -14,8 +14,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.SentimentSatisfied
 import androidx.compose.material.icons.filled.SentimentNeutral
+import androidx.compose.material.icons.filled.SentimentSatisfied
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,11 +29,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.challenge2025.model.checkin.Checkin
+import androidx.core.graphics.toColorInt
+import com.example.challenge2025.model.checkin.Checkin // Seu import correto
 import com.example.challenge2025.model.user.CheckinStatus
 import com.example.challenge2025.model.user.UserCheckin
 import java.time.LocalDate
-import androidx.core.graphics.toColorInt
 
 @Composable
 fun CheckinHistory(
@@ -41,6 +41,7 @@ fun CheckinHistory(
     onCheckinClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Mantendo a sua chamada para o objeto "Checkin", que está correta
     val checkinStatus = Checkin.getCheckinStatus(selectedDate)
     val checkin = Checkin.getCheckinForDate(selectedDate)
 
@@ -64,6 +65,7 @@ fun CheckinHistory(
                 )
 
                 CheckinStatus.COMPLETED -> checkin?.let {
+                    // CORREÇÃO: Passando o parâmetro com o nome correto ('onCheckinClick')
                     CheckinSummaryView(
                         checkin = it,
                         onCheckinClick = onCheckinClick
@@ -74,6 +76,8 @@ fun CheckinHistory(
     }
 }
 
+
+// O resto do seu arquivo, que já está correto, permanece igual
 @Composable
 private fun NoCheckinView(
     selectedDate: LocalDate,
@@ -112,9 +116,7 @@ private fun NoCheckinView(
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
             )
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-
         Text(
             text = if (selectedDate == LocalDate.now()) {
                 "Como você está se sentindo hoje?"
@@ -126,7 +128,6 @@ private fun NoCheckinView(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-
         Text(
             text = "Compartilhar seus sentimentos ajuda no seu autocuidado",
             style = MaterialTheme.typography.bodyMedium,
@@ -134,7 +135,6 @@ private fun NoCheckinView(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-
         Button(
             onClick = onCheckinClick,
             colors = ButtonDefaults.buttonColors(
@@ -171,11 +171,9 @@ private fun CheckinSummaryView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Converte hex colors para Color objects
         val feelingColors = checkin.feelings.map { feeling ->
             Color(feeling.colorHex.toColorInt())
         }
-
         Box(
             modifier = Modifier
                 .size(120.dp)
@@ -214,9 +212,7 @@ private fun CheckinSummaryView(
                 )
             }
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-
         Text(
             text = generateSummaryText(checkin),
             style = MaterialTheme.typography.titleMedium,
@@ -224,7 +220,6 @@ private fun CheckinSummaryView(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium
         )
-
         Row(
             modifier = Modifier.padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.Center,
@@ -240,15 +235,13 @@ private fun CheckinSummaryView(
                 Spacer(modifier = Modifier.width(4.dp))
             }
         }
-
         Text(
-            text = "Fazer novamente",
+            text = "Toque para fazer novamente",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
             fontSize = 12.sp
         )
-
         checkin.notes?.let { notes ->
             Spacer(modifier = Modifier.height(8.dp))
             Text(

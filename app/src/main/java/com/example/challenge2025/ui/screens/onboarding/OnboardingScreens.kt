@@ -54,8 +54,8 @@ fun OnboardingScreen3(navController: NavController) {
         description = "Visualize padrões emocionais, entenda como se sente ao longo do tempo e previna riscos com mais consciência e equilíbrio.",
         buttonText = "Entrar no App",
         onButtonClick = {
-            navController.navigate("home") {
-                // Limpa a pilha de navegação para que o usuário não possa voltar ao onboarding
+            navController.navigate("login") {
+                // Limpa a pilha de navegação parszdsa que o usuário não possa voltar ao onboarding
                 popUpTo("onboarding1") { inclusive = true }
             }
         }
