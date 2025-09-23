@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.challenge2025.model.data.MockCheckinData
+import com.example.challenge2025.model.checkin.Checkin
 import com.example.challenge2025.model.user.CheckinStatus
 import com.example.challenge2025.model.user.UserCheckin
 import java.time.LocalDate
@@ -41,8 +41,8 @@ fun CheckinHistory(
     onCheckinClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val checkinStatus = MockCheckinData.getCheckinStatus(selectedDate)
-    val checkin = MockCheckinData.getCheckinForDate(selectedDate)
+    val checkinStatus = Checkin.getCheckinStatus(selectedDate)
+    val checkin = Checkin.getCheckinForDate(selectedDate)
 
     Surface(
         modifier = modifier.fillMaxWidth(),

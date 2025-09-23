@@ -3,7 +3,7 @@ package com.example.challenge2025.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.challenge2025.model.data.MockCheckinData
+import com.example.challenge2025.model.checkin.Checkin
 import com.example.challenge2025.model.user.Feeling
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,7 +33,7 @@ class CheckinViewModel : ViewModel() {
 
     fun submitCheckin(date: LocalDate) {
         viewModelScope.launch {
-            MockCheckinData.submitCheckin(
+            Checkin.submitCheckin(
                 date = date,
                 selectedFeelings = _selectedFeelings.value,
                 notes = _checkinNotes.value.ifEmpty { null }

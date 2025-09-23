@@ -25,8 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.challenge2025.model.dailyCheckin.CalendarDay
-import com.example.challenge2025.model.dailyCheckin.CalendarWeek
+import com.example.challenge2025.model.checkin.CalendarDay
+import com.example.challenge2025.model.checkin.CalendarWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale

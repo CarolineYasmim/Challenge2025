@@ -1,4 +1,4 @@
-package com.example.challenge2025.model.dailyCheckin
+package com.example.challenge2025.model.checkin
 
 import java.time.LocalDate
 

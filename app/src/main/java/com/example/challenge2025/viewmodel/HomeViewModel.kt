@@ -3,8 +3,8 @@ package com.example.challenge2025.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.challenge2025.model.dailyCheckin.CalendarDay
-import com.example.challenge2025.model.dailyCheckin.CalendarWeek
+import com.example.challenge2025.model.checkin.CalendarDay
+import com.example.challenge2025.model.checkin.CalendarWeek
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

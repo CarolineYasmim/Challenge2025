@@ -1,12 +1,12 @@
-package com.example.challenge2025.model.data
+package com.example.challenge2025.model.checkin
 
+import com.example.challenge2025.R
+import com.example.challenge2025.model.user.CheckinStatus
 import com.example.challenge2025.model.user.Feeling
 import com.example.challenge2025.model.user.UserCheckin
-import com.example.challenge2025.model.user.CheckinStatus
-import com.example.challenge2025.R
 import java.time.LocalDate
 
-object MockCheckinData {
+object Checkin {
 
     // Lista de sentimentos disponíveis com os novos ícones e cores
     val availableFeelings = listOf(

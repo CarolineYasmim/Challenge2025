@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
-import com.example.challenge2025.model.data.MockCheckinData
+import com.example.challenge2025.model.checkin.Checkin
 import com.example.challenge2025.model.user.Feeling
 import com.example.challenge2025.viewmodel.CheckinViewModel
 import java.time.LocalDate
@@ -44,7 +44,7 @@ fun CheckinScreen(
 ) {
     val selectedFeelings by viewModel.selectedFeelings.collectAsState()
     val checkinNotes by viewModel.checkinNotes.collectAsState()
-    val availableFeelings = MockCheckinData.availableFeelings
+    val availableFeelings = Checkin.availableFeelings
 
     val formatter = DateTimeFormatter.ofPattern("d 'de' MMMM, yyyy", Locale("pt", "BR"))
 
