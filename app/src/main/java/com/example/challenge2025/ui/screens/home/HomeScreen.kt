@@ -16,6 +16,7 @@ import com.example.challenge2025.model.data.MockData
 import com.example.challenge2025.model.data.MockHomeData
 import com.example.challenge2025.ui.components.CheckinHistory
 import com.example.challenge2025.ui.components.Header
+import com.example.challenge2025.ui.components.SupportComponent
 import com.example.challenge2025.ui.components.WeeklyCalendar
 import com.example.challenge2025.ui.components.WeeklyGoals
 import com.example.challenge2025.viewmodel.CalendarViewModel
@@ -65,5 +66,12 @@ fun HomeScreen(
             mentalHealth = MockHomeData.mentalHealthSummary,
             careGoal = MockHomeData.careDaysGoal
         )
+
+        SupportComponent(
+            featuredResource = MockHomeData.featuredResource,
+            quickActions = MockHomeData.quickActions
+        )
+
+
     }
 }
