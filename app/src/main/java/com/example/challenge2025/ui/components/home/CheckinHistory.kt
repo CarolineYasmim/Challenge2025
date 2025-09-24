@@ -1,4 +1,4 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.home
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
@@ -9,6 +9,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,13 +25,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
-import com.example.challenge2025.model.checkin.Checkin // Seu import correto
+import com.example.challenge2025.model.checkin.Checkin
 import com.example.challenge2025.model.user.CheckinStatus
 import com.example.challenge2025.model.user.UserCheckin
 import java.time.LocalDate
@@ -41,15 +44,28 @@ fun CheckinHistory(
     onCheckinClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Mantendo a sua chamada para o objeto "Checkin", que está correta
     val checkinStatus = Checkin.getCheckinStatus(selectedDate)
     val checkin = Checkin.getCheckinForDate(selectedDate)
+
+    val isDarkTheme = isSystemInDarkTheme()
+
+    val surfaceColor = if (isDarkTheme) {
+        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+
+    val surfaceElevation = if (isDarkTheme) {
+        4.dp
+    } else {
+        0.dp
+    }
 
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-        shadowElevation = 4.dp
+        color = surfaceColor,
+        shadowElevation = surfaceElevation
     ) {
         AnimatedContent(
             targetState = checkinStatus,
@@ -63,9 +79,7 @@ fun CheckinHistory(
                     selectedDate = selectedDate,
                     onCheckinClick = onCheckinClick
                 )
-
                 CheckinStatus.COMPLETED -> checkin?.let {
-                    // CORREÇÃO: Passando o parâmetro com o nome correto ('onCheckinClick')
                     CheckinSummaryView(
                         checkin = it,
                         onCheckinClick = onCheckinClick
@@ -76,8 +90,7 @@ fun CheckinHistory(
     }
 }
 
-
-// O resto do seu arquivo, que já está correto, permanece igual
+// O restante do código permanece inalterado.
 @Composable
 private fun NoCheckinView(
     selectedDate: LocalDate,
@@ -187,7 +200,7 @@ private fun CheckinSummaryView(
                         drawCircle(
                             brush = sweepGradient,
                             radius = size.width / 2 - 4.dp.toPx(),
-                            style = androidx.compose.ui.graphics.drawscope.Stroke(
+                            style = Stroke(
                                 width = 8.dp.toPx()
                             )
                         )
@@ -249,7 +262,7 @@ private fun CheckinSummaryView(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 textAlign = TextAlign.Center,
-                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                fontStyle = FontStyle.Italic,
                 maxLines = 2
             )
         }

@@ -1,4 +1,4 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.tests
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

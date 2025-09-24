@@ -1,9 +1,6 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.tests
 
-
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -25,8 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.challenge2025.model.tests.TestItem
 import com.example.challenge2025.model.tests.TestStatus
@@ -36,24 +33,29 @@ fun TestCard(
     testItem: TestItem,
     onClick: (TestItem) -> Unit
 ) {
-    val isLight = !isSystemInDarkTheme()
+    val isDarkTheme = isSystemInDarkTheme()
+
+    val containerColor = if (isDarkTheme) {
+        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+
+    val cardElevation = if (isDarkTheme) {
+        CardDefaults.cardElevation(defaultElevation = 4.dp)
+    } else {
+        CardDefaults.cardElevation(defaultElevation = 0.dp)
+    }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp)
-            .clickable { onClick(testItem) }
-            .then(
-                if (isLight) Modifier.border(
-                    BorderStroke(1.dp, Color.Black),
-                    shape = RoundedCornerShape(12.dp)
-                ) else Modifier
-            ),
-        shape = RoundedCornerShape(12.dp),
+            .clickable { onClick(testItem) },
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isLight) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+            containerColor = containerColor
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = cardElevation
     ) {
         Row(
             modifier = Modifier
@@ -64,24 +66,26 @@ fun TestCard(
             Image(
                 painter = painterResource(id = testItem.iconRes),
                 contentDescription = testItem.title,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(40.dp)
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = testItem.title,
                     style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = testItem.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 if (testItem.status == TestStatus.TODO) {
                     Text(
@@ -100,7 +104,7 @@ fun TestCard(
                 Text(
                     text = "${testItem.durationMinutes} min",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outline
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
             }
 
@@ -108,7 +112,7 @@ fun TestCard(
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = "Feito",
-                    tint = Color(0xFF4CAF50),
+                    tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.size(24.dp)
                 )
             }

@@ -1,6 +1,9 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.tests
 
+//noinspection SuspiciousImport
+import android.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,15 +29,28 @@ import java.util.*
 fun UserResultCard(
     result: UserTestResult,
     modifier: Modifier = Modifier,
-    showChristianMessage: Boolean = false,
     onSupportClick: () -> Unit,
     onMoreInfoClick: () -> Unit
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+
+    val containerColor = if (isDarkTheme) {
+        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+
+    val cardElevation = if (isDarkTheme) {
+        CardDefaults.cardElevation(defaultElevation = 8.dp)
+    } else {
+        CardDefaults.cardElevation(defaultElevation = 0.dp)
+    }
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = cardElevation
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Header: título e badge
@@ -45,7 +62,7 @@ fun UserResultCard(
                     Text(
                         text = "Seu resultado está pronto",
                         style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                        fontWeight = FontWeight.Bold
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -73,7 +90,7 @@ fun UserResultCard(
                     Text(
                         text = result.level.uppercase(),
                         color = levelColor,
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
@@ -84,7 +101,7 @@ fun UserResultCard(
 
             // Mensagem acolhedora
             Text(
-                text = friendlyMessage(result, showChristianMessage),
+                text = friendlyMessage(result),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -96,7 +113,7 @@ fun UserResultCard(
                 Text(
                     text = "O que você pode fazer agora",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -115,7 +132,7 @@ fun UserResultCard(
             ) {
                 TextButton(onClick = onSupportClick) {
                     Icon(
-                        painter = painterResource(id = android.R.drawable.ic_menu_help),
+                        painter = painterResource(id = R.drawable.ic_menu_help),
                         contentDescription = "Apoio",
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -125,7 +142,7 @@ fun UserResultCard(
 
                 TextButton(onClick = onMoreInfoClick) {
                     Icon(
-                        painter = painterResource(id = android.R.drawable.ic_dialog_info),
+                        painter = painterResource(id = R.drawable.ic_dialog_info),
                         contentDescription = "Mais info",
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -163,13 +180,8 @@ private fun RecommendationItem(text: String) {
     }
 }
 
-/** Mensagem acolhedora baseada no resultado e se deseja tom cristão */
-private fun friendlyMessage(result: UserTestResult, showChristian: Boolean): String {
-    val base = result.interpretation
-    val encouragement = if (showChristian) {
-        " Lembre-se: você não está sozinho(a). Peça oração a alguém de confiança e considere acompanhamento profissional."
-    } else {
-        " Lembre-se: você deu um passo importante ao verificar isso. Procurar apoio é um ato de cuidado."
-    }
-    return base + encouragement
+
+private fun friendlyMessage(result: UserTestResult): String {
+    val encouragement = " Lembre-se: você deu um passo importante ao verificar isso. Procurar apoio é um ato de cuidado."
+    return encouragement
 }

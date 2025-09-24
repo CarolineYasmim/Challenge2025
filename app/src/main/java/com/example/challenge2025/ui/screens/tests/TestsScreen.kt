@@ -14,9 +14,9 @@ import com.example.challenge2025.model.data.MockData
 import com.example.challenge2025.model.data.MockData.currentUser
 import com.example.challenge2025.model.tests.TestCategory
 import com.example.challenge2025.model.tests.TestItem
-import com.example.challenge2025.ui.components.BannerCarousel
-import com.example.challenge2025.ui.components.Header
-import com.example.challenge2025.ui.components.TestListContainer
+import com.example.challenge2025.ui.components.tests.BannerCarousel
+import com.example.challenge2025.ui.components.assets.Header
+import com.example.challenge2025.ui.components.tests.TestListContainer
 import com.example.challenge2025.viewmodel.UserViewModel
 
 @Composable

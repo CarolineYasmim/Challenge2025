@@ -36,7 +36,7 @@ import com.example.challenge2025.model.data.MockData
 import com.example.challenge2025.model.tests.Question
 import com.example.challenge2025.model.user.UserAnswer
 import com.example.challenge2025.model.user.UserTestResult
-import com.example.challenge2025.ui.components.BackButton
+import com.example.challenge2025.ui.components.assets.BackButton
 import com.example.challenge2025.viewmodel.TestViewModel
 
 @Composable

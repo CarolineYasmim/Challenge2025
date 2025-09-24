@@ -14,11 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.challenge2025.model.data.MockHomeData
-import com.example.challenge2025.ui.components.CheckinHistory
-import com.example.challenge2025.ui.components.Header
-import com.example.challenge2025.ui.components.SupportComponent
-import com.example.challenge2025.ui.components.WeeklyCalendar
-import com.example.challenge2025.ui.components.WeeklyGoals
+import com.example.challenge2025.ui.components.home.CheckinHistory
+import com.example.challenge2025.ui.components.assets.Header
+import com.example.challenge2025.ui.components.menu.SupportComponent
+import com.example.challenge2025.ui.components.home.WeeklyCalendar
+import com.example.challenge2025.ui.components.home.WeeklyGoals
 import com.example.challenge2025.viewmodel.CalendarViewModel
 import com.example.challenge2025.viewmodel.UserViewModel
 

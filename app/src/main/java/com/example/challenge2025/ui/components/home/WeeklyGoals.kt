@@ -1,5 +1,6 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.home
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -113,10 +114,25 @@ private fun GoalCard(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+
+    val surfaceColor = if (isDarkTheme) {
+        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+
+    val surfaceElevation = if (isDarkTheme) {
+        4.dp
+    } else {
+        0.dp
+    }
+
     Surface(
         modifier = modifier.fillMaxHeight(),
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+        color = surfaceColor,
+        shadowElevation = surfaceElevation
     ) {
         Column(
             modifier = Modifier.padding(16.dp),

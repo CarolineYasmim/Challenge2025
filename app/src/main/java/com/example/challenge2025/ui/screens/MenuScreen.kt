@@ -17,7 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.challenge2025.ui.components.*
+import com.example.challenge2025.ui.components.menu.ActivityHistory
+import com.example.challenge2025.ui.components.menu.ProfileHeader
+import com.example.challenge2025.ui.components.menu.SettingItem
+import com.example.challenge2025.ui.components.menu.SettingType
+import com.example.challenge2025.ui.components.menu.SettingsGroup
 import com.example.challenge2025.viewmodel.UserViewModel
 
 @Composable
@@ -37,8 +41,16 @@ fun MenuScreen(
         SettingItem("Idioma", Icons.Rounded.Language, SettingType.NAVIGATION)
     )
     val supportItems = listOf(
-        SettingItem("Central de Ajuda", Icons.AutoMirrored.Filled.HelpOutline, SettingType.NAVIGATION),
-        SettingItem("Sair", Icons.AutoMirrored.Filled.ExitToApp, SettingType.NAVIGATION, onClick = { /* Lógica de Logout */ })
+        SettingItem(
+            "Central de Ajuda",
+            Icons.AutoMirrored.Filled.HelpOutline,
+            SettingType.NAVIGATION
+        ),
+        SettingItem(
+            "Sair",
+            Icons.AutoMirrored.Filled.ExitToApp,
+            SettingType.NAVIGATION,
+            onClick = { /* Lógica de Logout */ })
     )
 
     Column(

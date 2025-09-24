@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.challenge2025.R
 import com.example.challenge2025.model.user.UserTestResult
-import com.example.challenge2025.ui.components.ContinueButton
-import com.example.challenge2025.ui.components.UserResultCard
+import com.example.challenge2025.ui.components.tests.ContinueButton
+import com.example.challenge2025.ui.components.tests.UserResultCard
 
 @Composable
 fun TestResultScreen(
@@ -78,7 +78,6 @@ fun TestResultScreen(
             // Card reutilizável com interpretação, recomendações e ações
             UserResultCard(
                 result = result,
-                showChristianMessage = true,
                 onSupportClick = onSupportClick,
                 onMoreInfoClick = onMoreInfoClick
             )

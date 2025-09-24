@@ -16,10 +16,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.challenge2025.R
-import com.example.challenge2025.ui.components.AppLogo
-import com.example.challenge2025.ui.components.BigTitle
-import com.example.challenge2025.ui.components.OnboardingPagination
-import com.example.challenge2025.ui.components.RoundedButton
+import com.example.challenge2025.ui.components.assets.AppLogo
+import com.example.challenge2025.ui.components.auth.BigTitle
+import com.example.challenge2025.ui.components.onboarding.OnboardingPagination
+import com.example.challenge2025.ui.components.auth.RoundedButton
 
 @Composable
 fun OnboardingScreen1(navController: NavController) {

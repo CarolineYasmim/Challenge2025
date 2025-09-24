@@ -15,8 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.challenge2025.model.tests.TestDetail
-import com.example.challenge2025.ui.components.BackButton
-import com.example.challenge2025.ui.components.ContinueButton
+import com.example.challenge2025.ui.components.assets.BackButton
+import com.example.challenge2025.ui.components.tests.ContinueButton
 
 @Composable
 fun TestDescriptionScreen(

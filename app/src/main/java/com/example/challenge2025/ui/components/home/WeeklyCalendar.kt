@@ -1,11 +1,13 @@
 // UI/Components/WeeklyCalendar.kt
 @file:Suppress("DEPRECATION")
 
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -83,6 +85,8 @@ fun DayCell(
     isSelected: Boolean,
     onDateSelected: (LocalDate) -> Unit
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -95,10 +99,14 @@ fun DayCell(
             color = when {
                 isSelected -> MaterialTheme.colorScheme.primary
                 day.isToday -> MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-                else -> MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+                // NOVO: Condicional para a cor do círculo. Usa a cor translúcida apenas no tema escuro.
+                isDarkTheme -> MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+                else -> MaterialTheme.colorScheme.surface
             },
+            // NOVO: Borda condicional. Aplica borda nos dias normais apenas no tema claro.
             border = when {
                 day.isToday -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                !isDarkTheme -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                 else -> null
             },
             modifier = Modifier.size(40.dp)

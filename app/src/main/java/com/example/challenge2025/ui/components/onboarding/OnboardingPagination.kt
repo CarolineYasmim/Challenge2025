@@ -1,4 +1,4 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

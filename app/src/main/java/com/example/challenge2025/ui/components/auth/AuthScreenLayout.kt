@@ -1,4 +1,4 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.challenge2025.ui.components.assets.AppLogo
 
 @Composable
 fun AuthScreenLayout(

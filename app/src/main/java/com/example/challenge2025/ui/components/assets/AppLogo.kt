@@ -1,4 +1,4 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.assets
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Spa

@@ -1,5 +1,6 @@
-package com.example.challenge2025.ui.components
+package com.example.challenge2025.ui.components.tests
 
+import androidx.compose.foundation.layout.Arrangement // Importe o Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,8 @@ fun TestListContainer(
     tests: List<TestItem>,
     onTestClick: (TestItem) -> Unit
 ) {
+    // A Column principal já existe, não precisa de outra.
+    // Vamos adicionar o espaçamento a ela.
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
@@ -24,10 +27,15 @@ fun TestListContainer(
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-        tests.forEach { test ->
-            TestCard(testItem = test, onClick = onTestClick)
+        // Esta Column interna agrupará os cards e aplicará o espaçamento
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            tests.forEach { test ->
+                TestCard(testItem = test, onClick = onTestClick)
+            }
         }
     }
 }

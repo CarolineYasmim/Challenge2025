@@ -16,7 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.challenge2025.ui.components.BottomBar
+import com.example.challenge2025.ui.components.assets.BottomBar
 import com.example.challenge2025.ui.screens.MenuScreen
 import com.example.challenge2025.ui.screens.auth.LoginScreen
 import com.example.challenge2025.ui.screens.auth.SignUpScreen
@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
 
-                            composable("dashboard") { DashboardScreen(navController) }
+                            composable("dashboard") { DashboardScreen() }
 
                             composable("menu") {
                                 MenuScreen(
