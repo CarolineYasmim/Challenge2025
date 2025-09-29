@@ -18,21 +18,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.menu.ActivityHistory
 import com.example.challenge2025.ui.components.menu.ProfileHeader
 import com.example.challenge2025.ui.components.menu.SettingItem
 import com.example.challenge2025.ui.components.menu.SettingType
 import com.example.challenge2025.ui.components.menu.SettingsGroup
+import com.example.challenge2025.viewmodel.AuthViewModel
 import com.example.challenge2025.viewmodel.UserViewModel
 
 @Composable
 fun MenuScreen(
-    navController: NavController,
     userViewModel: UserViewModel = viewModel(),
-    logout: () -> Unit
 ) {
+    val authViewModel: AuthViewModel = hiltViewModel()
     val currentUser by userViewModel.currentUser.collectAsState()
 
     // Launcher de seleção de foto (somente nesta tela)
@@ -64,7 +64,7 @@ fun MenuScreen(
             "Sair",
             Icons.AutoMirrored.Filled.ExitToApp,
             SettingType.NAVIGATION,
-            onClick = {logout()})
+            onClick = {authViewModel.logout()})
     )
 
     Column(

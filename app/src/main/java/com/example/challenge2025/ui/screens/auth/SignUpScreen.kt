@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.auth.AuthScreenLayout
 import com.example.challenge2025.ui.components.auth.AuthTextField
@@ -23,7 +24,7 @@ import com.example.challenge2025.viewmodel.AuthViewModel
 @Composable
 fun SignUpScreen(
     navController: NavController,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.authState.collectAsState()
 

@@ -1,13 +1,14 @@
 package com.example.challenge2025.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.challenge2025.datastore.AuthPreferences
 import com.example.challenge2025.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class AuthState(
     val email: String = "",
@@ -18,8 +19,9 @@ data class AuthState(
     val nameError: String = ""
 )
 
-class AuthViewModel(
-    private val repository: AuthRepository = AuthRepository(),
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val repository: AuthRepository,
     private val prefs: AuthPreferences
 ) : ViewModel() {
     private val _authState = MutableStateFlow(AuthState())
@@ -102,19 +104,6 @@ class AuthViewModel(
         viewModelScope.launch {
             prefs.clearAuth()
         }
-    }
-}
-
-class AuthViewModelFactory(
-    private val repository: AuthRepository,
-    private val prefs: AuthPreferences
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AuthViewModel(repository, prefs) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 

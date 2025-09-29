@@ -1,4 +1,4 @@
-package com.example.challenge2025.model.user
+package com.example.challenge2025.model.auth
 
 data class RegisterRequest(
     val name: String,

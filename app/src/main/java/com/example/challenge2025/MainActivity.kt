@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -19,8 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.example.challenge2025.datastore.AuthPreferences
-import com.example.challenge2025.repository.AuthRepository
 import com.example.challenge2025.ui.components.assets.BottomBar
 import com.example.challenge2025.ui.screens.menu.MenuScreen
 import com.example.challenge2025.ui.screens.auth.LoginScreen
@@ -36,13 +33,13 @@ import com.example.challenge2025.ui.screens.tests.TestQuestionScreen
 import com.example.challenge2025.ui.screens.tests.TestResultScreen
 import com.example.challenge2025.ui.screens.tests.TestsScreen
 import com.example.challenge2025.ui.theme.Challenge2025Theme
-import com.example.challenge2025.viewmodel.AuthViewModel
-import com.example.challenge2025.viewmodel.AuthViewModelFactory
 import com.example.challenge2025.viewmodel.UserViewModel
 import com.example.challenge2025.viewmodel.CheckinViewModel
 import com.example.challenge2025.viewmodel.TestViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -59,12 +56,6 @@ class MainActivity : ComponentActivity() {
                     val testViewModel: TestViewModel = viewModel()
                     val userViewModel: UserViewModel = viewModel()
                     val checkinViewModel: CheckinViewModel = viewModel()
-
-                    val context = LocalContext.current
-                    val prefs = AuthPreferences(context)
-                    val authViewModel: AuthViewModel = viewModel(
-                        factory = AuthViewModelFactory(AuthRepository(), prefs)
-                    )
 
                     val mainAppRoutes = listOf("home", "tests", "dashboard", "menu")
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -85,8 +76,8 @@ class MainActivity : ComponentActivity() {
 
                             composable("start_screen") { StartScreen(navController) }
 
-                            composable("login") { LoginScreen(navController, authViewModel) }
-                            composable("sign_up") { SignUpScreen(navController, authViewModel) }
+                            composable("login") { LoginScreen(navController) }
+                            composable("sign_up") { SignUpScreen(navController) }
 
 
 
@@ -118,9 +109,7 @@ class MainActivity : ComponentActivity() {
                             composable("dashboard") { DashboardScreen() }
                             composable("menu") {
                                 MenuScreen(
-                                    navController = navController,
-                                    userViewModel = userViewModel,
-                                    logout = { authViewModel.logout() }
+                                    userViewModel = userViewModel
                                 )
                             }
 
