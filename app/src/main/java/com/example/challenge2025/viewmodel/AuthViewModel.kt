@@ -1,94 +1,120 @@
 package com.example.challenge2025.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.challenge2025.datastore.AuthPreferences
+import com.example.challenge2025.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-// Estado que representa tudo na UI de login/cadastro
 data class AuthState(
-    val currentStep: Int = 1,
-    // Etapa 1
-    val name: String = "",
     val email: String = "",
     val password: String = "",
-    // Etapa 2
-    val company: String = "",
-    val department: String = "",
-    val role: String = "",
-    // Erros
-    val nameError: String? = null,
-    val emailError: String? = null,
-    val passwordError: String? = null
+    val name: String = "",
+    val emailError: String = "",
+    val passwordError: String = "",
+    val nameError: String = ""
 )
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(
+    private val repository: AuthRepository = AuthRepository(),
+    private val prefs: AuthPreferences
+) : ViewModel() {
     private val _authState = MutableStateFlow(AuthState())
     val authState = _authState.asStateFlow()
-
-    // Mock de dados para os Dropdowns
-    val companies = listOf("Empresa A", "Empresa B", "Empresa C")
-    val departments = listOf("RH", "TI", "Marketing", "Vendas")
-    val roles = listOf("Analista", "Gerente", "Estagiário", "Coordenador")
-
-
-    fun onNameChange(name: String) {
-        _authState.update { it.copy(name = name, nameError = null) }
-    }
-
     fun onEmailChange(email: String) {
-        _authState.update { it.copy(email = email, emailError = null) }
+        _authState.value = _authState.value.copy(email = email, emailError = "")
     }
 
     fun onPasswordChange(password: String) {
-        _authState.update { it.copy(password = password, passwordError = null) }
+        _authState.value = _authState.value.copy(password = password, passwordError = "")
     }
 
-    fun onCompanyChange(company: String) {
-        _authState.update { it.copy(company = company) }
+    fun onNameChange(name: String) {
+        _authState.value = _authState.value.copy(name = name, nameError = "")
     }
 
-    fun onDepartmentChange(department: String) {
-        _authState.update { it.copy(department = department) }
-    }
+    fun signUp(onSuccess: () -> Unit) {
+        val state = _authState.value
+        val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(state.email.trim()).matches()
+        val isPasswordValid = state.password.length >= 6
+        val isNameValid = state.name.isNotBlank()
 
-    fun onRoleChange(role: String) {
-        _authState.update { it.copy(role = role) }
-    }
-
-    fun nextStep() {
-        if (validateCurrentStep()) {
-            _authState.update { it.copy(currentStep = it.currentStep + 1) }
+        if (!isEmailValid || !isPasswordValid || !isNameValid) {
+            _authState.value = _authState.value.copy(
+                emailError = if (!isEmailValid) "E-mail inválido" else "",
+                passwordError = if (!isPasswordValid) "Senha deve ter ao menos 6 caracteres" else "",
+                nameError = if (!isNameValid) "Nome não pode estar em branco" else ""
+            )
+            return
         }
-    }
 
-    fun previousStep() {
-        _authState.update { it.copy(currentStep = it.currentStep - 1) }
-    }
-
-    private fun validateCurrentStep(): Boolean {
-        return when (_authState.value.currentStep) {
-            1 -> {
-                if (_authState.value.name.isBlank()) {
-                    _authState.update { it.copy(nameError = "Nome não pode estar em branco") }
-                    return false
-                }
-                if (_authState.value.email.isBlank() || !_authState.value.email.contains("@")) {
-                    _authState.update { it.copy(emailError = "E-mail inválido") }
-                    return false
-                }
-                if (_authState.value.password.length < 6) {
-                    _authState.update { it.copy(passwordError = "Senha deve ter no mínimo 6 caracteres") }
-                    return false
-                }
-                true
+        viewModelScope.launch {
+            try {
+                repository.register(
+                    name = state.name,
+                    email = state.email,
+                    password = state.password
+                )
+                onSuccess()
+            } catch (e: Exception) {
+                // Aqui podemos capturar melhor o erro do backend
+                val errorMessage = e.message ?: "Erro desconhecido"
+                _authState.value = _authState.value.copy(emailError = errorMessage)
             }
-            // Adicionar validações para outros passos se necessário
-            else -> true
         }
     }
 
-    // Funções de login/cadastro que chamarão o backend no futuro
-    fun login() { /* TODO: Lógica de Login */ }
-    fun signUp() { /* TODO: Lógica de Cadastro */ }
+
+    fun login(onResult: (isFirstLogin: Boolean) -> Unit) {
+        val state = _authState.value
+
+        val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(state.email.trim()).matches()
+        val isPasswordValid = state.password.isNotBlank()
+
+        if (!isEmailValid || !isPasswordValid) {
+            _authState.value = _authState.value.copy(
+                emailError = if (!isEmailValid) "E-mail inválido" else "",
+                passwordError = if (!isPasswordValid) "Senha não pode estar em branco" else ""
+            )
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val response = repository.login(state.email.trim(), state.password)
+
+                 prefs.saveAuth(response.token, state.email)
+
+                onResult(response.isFirstLogin)
+            } catch (e: Exception) {
+                _authState.value = _authState.value.copy(
+                    emailError = "Usuário ou senha inválidos"
+                )
+                println("Erro no login: ${e.message}")
+            }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            prefs.clearAuth()
+        }
+    }
 }
+
+class AuthViewModelFactory(
+    private val repository: AuthRepository,
+    private val prefs: AuthPreferences
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return AuthViewModel(repository, prefs) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+

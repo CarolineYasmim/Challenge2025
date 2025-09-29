@@ -41,7 +41,6 @@ fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    // Espaçamento externo (padding) da barra inferior
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -54,7 +53,7 @@ fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(72.dp) // Altura aumentada conforme solicitado
+                .height(72.dp)
                 .background(
                     color = MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(24.dp)
@@ -102,39 +101,38 @@ fun BottomNavItem(
     onClick: () -> Unit
 ) {
     if (isSelected) {
-        // Item selecionado - com fundo e texto
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .height(48.dp) // Altura aumentada do pílula
+                .height(48.dp)
                 .clip(RoundedCornerShape(24.dp))
                 .background(pillColor)
-                .padding(horizontal = 20.dp, vertical = 12.dp) // Padding aumentado
+                .padding(horizontal = 20.dp, vertical = 12.dp)
                 .clickable(onClick = onClick)
         ) {
             Icon(
                 imageVector = item.icon,
                 contentDescription = item.title,
-                tint = Color.White, // <-- forçado branco
+                tint = Color.White,
                 modifier = Modifier.size(22.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = item.title,
                 fontSize = 14.sp,
-                color = Color.White // <-- forçado branco
+                color = Color.White
             )
         }
     } else {
-        // Item não selecionado - apenas ícone
+
         Icon(
             imageVector = item.icon,
             contentDescription = item.title,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
-                .size(43.dp) // Tamanho aumentado do ícone
+                .size(43.dp)
                 .clickable(onClick = onClick)
-                .padding(8.dp) // Espaçamento interno para melhor toque
+                .padding(8.dp)
         )
     }
 }

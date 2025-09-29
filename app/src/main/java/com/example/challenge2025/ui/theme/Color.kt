@@ -8,7 +8,7 @@ val GrayDark = Color(0xFF424242)
 
 // Cores do app
 val Orange = Color(0xFFF49E4C)
-val Blue = Color(0xFF7584FA)
+val Blue = Color(0xFF6b76ce)
 val Green = Color(0xFF81F495)
 
 // Outros tons (opcional, para Material3)

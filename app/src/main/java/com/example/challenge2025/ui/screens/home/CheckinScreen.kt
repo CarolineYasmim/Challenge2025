@@ -72,7 +72,6 @@ fun CheckinScreen(
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Título mais acolhedor
             Text(
                 text = "Como você está se sentindo hoje?",
                 style = MaterialTheme.typography.headlineSmall,
@@ -80,7 +79,6 @@ fun CheckinScreen(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 16.dp)
             )
-            // Subtítulo com a data
             Text(
                 text = "Check-in de ${date.format(formatter)}",
                 style = MaterialTheme.typography.bodyMedium,
@@ -143,7 +141,7 @@ private fun FeelingGrid(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 90.dp),
-        modifier = Modifier.heightIn(max = 350.dp), // Evita que a grid ocupe a tela toda
+        modifier = Modifier.heightIn(max = 350.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {

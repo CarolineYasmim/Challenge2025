@@ -20,23 +20,25 @@ fun AuthTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    modifier: Modifier = Modifier,      // <-- PARÂMETRO ADICIONADO
-    readOnly: Boolean = false,          // <-- PARÂMETRO ADICIONADO
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
     isError: Boolean = false,
     errorMessage: String? = null,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean = true // <-- PARÂMETRO ADICIONADO
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
     val isPasswordField = keyboardType == KeyboardType.Password
 
-    Column(modifier = modifier) { // <-- MODIFIER APLICADO AQUI NO COLUMN EXTERNO
+    Column {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             label = { Text(label) },
-            modifier = Modifier.fillMaxWidth(), // O TextField interno sempre preenche a largura do Column
-            readOnly = readOnly,                // <-- PARÂMETRO PASSADO AQUI
+            modifier = modifier.fillMaxWidth(),
+            readOnly = readOnly,
             isError = isError,
+            enabled = enabled, // <-- PARÂMETRO APLICADO AQUI
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             singleLine = true,
             visualTransformation = if (isPasswordField && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,

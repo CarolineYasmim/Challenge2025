@@ -11,7 +11,6 @@ enum class TimePeriod {
     YEARLY
 }
 
-// Representa uma única fatia do gráfico de sentimentos
 data class FeelingPercentage(
     val feeling: Feeling,
     val percentage: Float,
@@ -19,17 +18,15 @@ data class FeelingPercentage(
     val color: String
 )
 
-// NOVA: Estrutura para o gráfico de sentimentos do período
 data class PeriodFeelingSummary(
     val mostFrequentFeeling: Feeling?,
     val feelingPercentages: List<FeelingPercentage>
 )
 
-// AJUSTADA: Agora com Depressão e tendências para todos os itens
 data class WellbeingPanel(
     val burnoutRisk: String,
     val anxietyLevel: String,
-    val depressionLevel: String, // Substituiu "Humor"
+    val depressionLevel: String,
     val burnoutTrend: Trend = Trend.STABLE,
     val anxietyTrend: Trend = Trend.STABLE,
     val depressionTrend: Trend = Trend.STABLE
@@ -39,7 +36,7 @@ data class WellbeingPanel(
     }
 }
 
-// NOVA: Estrutura para o gráfico de linha de tendências
+
 data class PsychosocialTrend(
     // O Map guardará uma lista de pontos para cada tipo de teste
     // Ex: "Ansiedade" -> [DataPoint(timestamp, score), DataPoint(timestamp, score), ...]

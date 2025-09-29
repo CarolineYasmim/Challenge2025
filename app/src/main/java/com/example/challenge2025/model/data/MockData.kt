@@ -400,7 +400,8 @@ object MockData {
     val currentUser = User(
         id = "u1",
         name = "Yasmim",
-        avatarRes = R.drawable.avatar,
+        avatarUrl = null,
+        avatarRes = R.drawable.default_avatar,
         bannerRes = R.drawable.default_banner,
         status = "Cuidando de mim",
         description = "Apaixonada por mindfulness e café. Buscando equilíbrio um dia de cada vez.",

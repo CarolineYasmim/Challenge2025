@@ -54,14 +54,11 @@ fun HomeScreen(
 
         CheckinHistory(
             selectedDate = selectedDate,
-            // CORREÇÃO: O nome do parâmetro foi ajustado para 'onCheckinClick'
             onCheckinClick = {
                 navController.navigate("checkin/${selectedDate}")
             }
         )
 
-        // Nota: Se você renomeou o componente de 'WeeklyGoalsComponent' para 'WeeklyGoals',
-        // apenas ajuste o nome da chamada aqui.
         WeeklyGoals(
             mentalHealth = MockHomeData.mentalHealthSummary,
             careGoal = MockHomeData.careDaysGoal

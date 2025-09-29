@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.challenge2025.model.user.User
+import com.example.challenge2025.ui.components.assets.AvatarImage
 
 @Composable
 fun ProfileHeader(
@@ -45,18 +46,17 @@ fun ProfileHeader(
                     .align(Alignment.BottomStart)
                     .offset(y = 40.dp)
             ) {
+                // --- MODIFICAÇÃO APLICADA AQUI ---
                 // Avatar
-                Image(
-                    painter = painterResource(id = user.avatarRes),
-                    contentDescription = "Avatar do usuário",
-                    contentScale = ContentScale.Crop,
+                AvatarImage(
+                    user = user,
                     modifier = Modifier
                         .size(80.dp)
                         .clip(CircleShape)
                 )
+                // ------------------------------------
 
-                // --- INÍCIO DA MODIFICAÇÃO ---
-                // Botão de Editar sobre o Avatar com cores corrigidas para Light/Dark theme
+                // Botão de Editar sobre o Avatar
                 IconButton(
                     onClick = onEditClick,
                     modifier = Modifier
@@ -73,7 +73,6 @@ fun ProfileHeader(
                         modifier = Modifier.size(16.dp)
                     )
                 }
-                // --- FIM DA MODIFICAÇÃO ---
             }
         }
 

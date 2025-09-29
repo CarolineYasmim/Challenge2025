@@ -6,15 +6,16 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 
 // Light ColorScheme
 private val LightColors = lightColorScheme(
     primary = Blue,
     secondary = Green,
     tertiary = Orange,
-    background = White,
-    surface = White,
-    surfaceVariant = GrayLight,
+    background = Color(0xFFF3F3F6), // <-- NOVO: Fundo cinza claro
+    surface = White,                // <-- NOVO: Cartões e superfícies brancas
+    surfaceVariant = White,         // <-- NOVO: Cartões e superfícies brancas
     onSurface = Black,
     onPrimary = White,
     onSecondary = White,
@@ -30,7 +31,7 @@ private val DarkColors = darkColorScheme(
     surface = GrayDark,
     surfaceVariant = GrayDark,
     onSurface = White,
-    onPrimary = Black,
+    onPrimary = White,
     onSecondary = Black,
     onTertiary = Black
 )
