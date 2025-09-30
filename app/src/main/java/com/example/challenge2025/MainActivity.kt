@@ -33,9 +33,9 @@ import com.example.challenge2025.ui.screens.tests.TestQuestionScreen
 import com.example.challenge2025.ui.screens.tests.TestResultScreen
 import com.example.challenge2025.ui.screens.tests.TestsScreen
 import com.example.challenge2025.ui.theme.Challenge2025Theme
-import com.example.challenge2025.viewmodel.UserViewModel
-import com.example.challenge2025.viewmodel.CheckinViewModel
-import com.example.challenge2025.viewmodel.TestViewModel
+import com.example.challenge2025.ui.viewmodel.UserViewModel
+import com.example.challenge2025.ui.viewmodel.CheckinViewModel
+import com.example.challenge2025.ui.viewmodel.TestViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 

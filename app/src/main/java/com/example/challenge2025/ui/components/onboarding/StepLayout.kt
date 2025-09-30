@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.assets.BackButton
 import com.example.challenge2025.ui.components.auth.AuthScreenLayout
-import com.example.challenge2025.viewmodel.UserViewModel
+import com.example.challenge2025.ui.viewmodel.UserViewModel
 
 @Composable
 fun StepLayout(

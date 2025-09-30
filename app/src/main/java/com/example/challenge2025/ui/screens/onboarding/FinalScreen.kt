@@ -20,12 +20,10 @@ import androidx.navigation.NavController
 import com.example.challenge2025.R
 import com.example.challenge2025.ui.components.auth.BigTitle
 import com.example.challenge2025.ui.components.auth.RoundedButton
-import com.example.challenge2025.viewmodel.AuthViewModel
 
 @Composable
 fun FinalScreen(
     navController: NavController,
-    authViewModel: AuthViewModel,
 ) {
     Column(
         modifier = Modifier
@@ -64,11 +62,9 @@ fun FinalScreen(
         RoundedButton(
             text = "Começar a usar", // Texto do botão mais convidativo
             onClick = {
-                authViewModel.signUp {
                     navController.navigate("home") {
                         popUpTo("onboarding_route") { inclusive = true }
                     }
-                }
             },
             modifier = Modifier.fillMaxWidth()
         )

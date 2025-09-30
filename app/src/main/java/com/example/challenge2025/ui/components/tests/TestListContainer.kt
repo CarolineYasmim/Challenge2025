@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.challenge2025.model.tests.TestItem
+import com.example.challenge2025.domain.model.tests.TestItem
 
 @Composable
 fun TestListContainer(
@@ -18,8 +18,6 @@ fun TestListContainer(
     tests: List<TestItem>,
     onTestClick: (TestItem) -> Unit
 ) {
-    // A Column principal já existe, não precisa de outra.
-    // Vamos adicionar o espaçamento a ela.
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,

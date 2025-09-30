@@ -7,11 +7,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.auth.AuthTextField
 import com.example.challenge2025.ui.components.auth.RoundedButton
 import com.example.challenge2025.ui.components.onboarding.StepLayout
-import com.example.challenge2025.viewmodel.UserViewModel
+import com.example.challenge2025.domain.util.Resource
+import com.example.challenge2025.ui.viewmodel.UserViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -20,11 +22,26 @@ import java.time.format.DateTimeParseException
 @Composable
 fun CompanyDetailsScreen(
     navController: NavController,
-    userViewModel: UserViewModel,
+    userViewModel: UserViewModel = hiltViewModel(),
     totalSteps: Int
 ) {
     val state by userViewModel.onboardingState.collectAsState()
+    val createState by userViewModel.createUserState.collectAsState()
     val currentStep = 6
+
+    LaunchedEffect(createState) {
+        val result = createState
+
+        when (result) {
+            is Resource.Success -> {
+                userViewModel.nextStep()
+            }
+            is Resource.Error -> {
+                println("Erro ao finalizar cadastro: ${result.message}")
+            }
+            else -> { /* Não faz nada */ }
+        }
+    }
 
     var companyExpanded by remember { mutableStateOf(false) }
     var departmentExpanded by remember { mutableStateOf(false) }
@@ -99,6 +116,7 @@ fun CompanyDetailsScreen(
                         }
                     }
                 }
+
 
                 // --- Setor (editável + dropdown) ---
                 ExposedDropdownMenuBox(
@@ -217,7 +235,8 @@ fun CompanyDetailsScreen(
 
             RoundedButton(
                 text = "Finalizar",
-                onClick = { userViewModel.nextStep() },
+                onClick = { userViewModel.finalizeOnboarding() },
+                enabled = createState !is Resource.Loading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 40.dp)

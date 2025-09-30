@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,9 +27,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
-import com.example.challenge2025.model.checkin.Checkin
-import com.example.challenge2025.model.user.Feeling
-import com.example.challenge2025.viewmodel.CheckinViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.challenge2025.model.checkin.Feeling
+import com.example.challenge2025.domain.util.Resource
+import com.example.challenge2025.ui.viewmodel.CheckinViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -38,13 +39,25 @@ import java.util.Locale
 @Composable
 fun CheckinScreen(
     date: LocalDate,
-    viewModel: CheckinViewModel,
+    viewModel: CheckinViewModel = hiltViewModel(),
     onClose: () -> Unit,
     onSubmit: () -> Unit
 ) {
     val selectedFeelings by viewModel.selectedFeelings.collectAsState()
     val checkinNotes by viewModel.checkinNotes.collectAsState()
-    val availableFeelings = Checkin.availableFeelings
+    val availableFeelings = viewModel.availableFeelings
+    val submitState by viewModel.submitState.collectAsState()
+
+    LaunchedEffect(submitState) {
+        val result = submitState
+        if (result is Resource.Success) {
+            onSubmit() // Chama a função de callback para fechar a tela
+        }
+        if (result is Resource.Error) {
+            // No futuro, você pode mostrar um Snackbar de erro aqui
+            println("Erro: ${result.message}")
+        }
+    }
 
     val formatter = DateTimeFormatter.ofPattern("d 'de' MMMM, yyyy", Locale("pt", "BR"))
 
@@ -117,17 +130,24 @@ fun CheckinScreen(
 
             Button(
                 onClick = {
-                    viewModel.submitCheckin(date)
-                    onSubmit()
+                    viewModel.submitCheckin()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp),
-                enabled = selectedFeelings.isNotEmpty()
+                enabled = selectedFeelings.isNotEmpty() && submitState !is Resource.Loading
             ) {
-                Text("Salvar Check-in", fontSize = 16.sp)
+                if (submitState is Resource.Loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("Salvar Check-in", fontSize = 16.sp)
+                }
             }
+
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

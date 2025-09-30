@@ -25,8 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.challenge2025.model.tests.TestItem
-import com.example.challenge2025.model.tests.TestStatus
+import com.example.challenge2025.domain.model.tests.TestItem
+import com.example.challenge2025.domain.model.tests.TestStatus
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun TestCard(
@@ -108,14 +109,38 @@ fun TestCard(
                 )
             }
 
-            if (testItem.status == TestStatus.DONE) {
-                Icon(
-                    imageVector = Icons.Default.CheckCircle,
-                    contentDescription = "Feito",
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(24.dp)
+            if (testItem.status == TestStatus.TODO) {
+                Text(
+                    text = "A fazer",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            } else {
+                // Formata a data que vem do TestItem para "dd/MM/yyyy"
+                // Se a data for nula por algum motivo, mostra "Concluído"
+                val dateText = testItem.lastResultDate
+                    ?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: "Concluído"
+                Text(
+                    text = "Último resultado: $dateText",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
+
+            Text(
+                text = "${testItem.durationMinutes} min",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            )
+        }
+
+        if (testItem.status == TestStatus.DONE) {
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = "Feito",
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(24.dp)
+            )
         }
     }
 }

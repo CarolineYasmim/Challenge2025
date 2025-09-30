@@ -1,15 +1,17 @@
-// ARQUIVO NOVO: di/AppModule.kt
-
 package com.example.challenge2025.di
 
 import android.content.Context
-import com.example.challenge2025.datastore.AuthPreferences
-import com.example.challenge2025.network.ApiService
-import com.example.challenge2025.network.AuthInterceptor
-import com.example.challenge2025.repository.AuthRepository
-import com.example.challenge2025.repository.AuthRepositoryImpl
-import com.example.challenge2025.repository.UserRepository
-import com.example.challenge2025.repository.UserRepositoryImpl
+import com.example.challenge2025.data.local.AuthPreferences
+import com.example.challenge2025.data.remote.ApiService
+import com.example.challenge2025.data.remote.AuthInterceptor
+import com.example.challenge2025.domain.repository.AuthRepository
+import com.example.challenge2025.data.repository.AuthRepositoryImpl
+import com.example.challenge2025.domain.repository.CheckinRepository
+import com.example.challenge2025.data.repository.CheckinRepositoryImpl
+import com.example.challenge2025.data.repository.TestRepositoryImpl
+import com.example.challenge2025.domain.repository.UserRepository
+import com.example.challenge2025.data.repository.UserRepositoryImpl
+import com.example.challenge2025.domain.repository.TestRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -37,6 +39,15 @@ abstract class AppModule {
     abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 
 
+    @Binds
+    @Singleton
+    abstract fun bindCheckinRepository(impl: CheckinRepositoryImpl): CheckinRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTestRepository(impl: TestRepositoryImpl): TestRepository
+
+
     // Usamos um companion object para as funções @Provides, que constroem objetos
     companion object {
 
@@ -51,6 +62,10 @@ abstract class AppModule {
         fun provideAuthInterceptor(prefs: AuthPreferences): AuthInterceptor {
             return AuthInterceptor(prefs)
         }
+
+
+
+
 
         @Provides
         @Singleton
@@ -81,4 +96,6 @@ abstract class AppModule {
             return retrofit.create(ApiService::class.java)
         }
     }
+
+
 }

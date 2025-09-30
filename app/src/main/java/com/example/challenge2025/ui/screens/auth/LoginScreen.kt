@@ -13,12 +13,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.auth.AuthScreenLayout
 import com.example.challenge2025.ui.components.auth.AuthTextField
 import com.example.challenge2025.ui.components.auth.RoundedButton
-import com.example.challenge2025.viewmodel.AuthViewModel
+import com.example.challenge2025.ui.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(

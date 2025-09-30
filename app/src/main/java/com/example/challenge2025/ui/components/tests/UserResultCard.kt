@@ -17,14 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.challenge2025.model.user.UserTestResult
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * Cartão reutilizável para exibir resultado do teste de forma acolhedora e informativa.
- * Sem ícones de salvar/compartilhar, focado em empatia e recomendações.
- */
 @Composable
 fun UserResultCard(
     result: UserTestResult,

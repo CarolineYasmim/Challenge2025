@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.onboarding.PotentialChart
 import com.example.challenge2025.ui.components.auth.RoundedButton
 import com.example.challenge2025.ui.components.onboarding.StepLayout
-import com.example.challenge2025.viewmodel.UserViewModel
+import com.example.challenge2025.ui.viewmodel.UserViewModel
 
 @Composable
 fun PotentialScreen(
