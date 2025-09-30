@@ -1,10 +1,11 @@
 package com.example.challenge2025.network
 
-import com.android.volley.Response
+
 import com.example.challenge2025.model.auth.AuthResponse
 import com.example.challenge2025.model.auth.LoginRequest
 import com.example.challenge2025.model.auth.RegisterRequest
 import com.example.challenge2025.model.user.CreateUserRequest
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 

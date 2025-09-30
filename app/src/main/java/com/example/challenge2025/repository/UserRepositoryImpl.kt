@@ -2,23 +2,23 @@
 
 package com.example.challenge2025.repository
 
-import com.bumptech.glide.load.engine.Resource
+import retrofit2.Response
+import com.example.challenge2025.util.Resource
 import com.example.challenge2025.model.user.CreateUserRequest
 import com.example.challenge2025.network.ApiService
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton // Garante que só teremos uma instância
+@Singleton
 class UserRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : UserRepository {
 
     override suspend fun createUserProfile(data: CreateUserRequest): Resource<Unit> {
-        // MUDANÇA 2: Lógica de tratamento de resposta corrigida
         return try {
-            val response = apiService.createUserProfile(data) // Retrofit retorna um Response
+            val response: Response<Unit> = apiService.createUserProfile(data)
             if (response.isSuccessful) {
-                Resource.Success(Unit) // Se a resposta for sucesso, retornamos nosso Resource.Success
+                Resource.Success(Unit)
             } else {
                 Resource.Error("Erro do servidor: ${response.message()}")
             }

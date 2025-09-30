@@ -1,11 +1,19 @@
 package com.example.challenge2025.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.challenge2025.R
+import com.example.challenge2025.model.user.CreateUserRequest
 import com.example.challenge2025.model.user.User
+import com.example.challenge2025.repository.UserRepository
+import com.example.challenge2025.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
 data class OnboardingState(
     val currentStep: Int = 1,
@@ -21,8 +29,13 @@ data class OnboardingState(
     val ageError: String? = null
 )
 
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel() {
 
-class UserViewModel : ViewModel() {
+
+
 
     private val _currentUser = MutableStateFlow(
         User(
@@ -40,6 +53,9 @@ class UserViewModel : ViewModel() {
 
     private val _onboardingState = MutableStateFlow(OnboardingState())
     val onboardingState = _onboardingState.asStateFlow()
+
+    private val _createUserState = MutableStateFlow<Resource<Unit>?>(null)
+    val createUserState = _createUserState.asStateFlow()
 
     val motivationOptions = listOf(
         "Entender meus sentimentos",
@@ -128,6 +144,7 @@ class UserViewModel : ViewModel() {
                 if (!ageValid) _onboardingState.value = state.copy(ageError = "Idade inválida")
                 ageValid && genderValid
             }
+
             3 -> true // tela de engajamento
             4 -> true // credenciais (login/signup) já tratadas no AuthViewModel
             5 -> state.termsAccepted
@@ -138,7 +155,29 @@ class UserViewModel : ViewModel() {
                     state.company.isNotBlank() && state.department.isNotBlank() && state.role.isNotBlank() && state.entryDate != null
                 }
             }
+
             else -> true
+        }
+    }
+
+    fun finalizeOnboarding() {
+        viewModelScope.launch {
+            _createUserState.value = Resource.Loading()
+
+            val currentState = _onboardingState.value
+
+            // Mapeia o estado atual do onboarding para o objeto que a API espera (DTO)
+            val request = CreateUserRequest(
+                age = currentState.age.toIntOrNull() ?: 0,
+                gender = currentState.gender,
+                company = currentState.company,
+                department = currentState.department,
+                role = currentState.role,
+                entryDate = currentState.entryDate?.format(DateTimeFormatter.ISO_LOCAL_DATE) // Formato "yyyy-MM-dd"
+            )
+
+            // Chama o repositório e atualiza o estado com o resultado
+            _createUserState.value = userRepository.createUserProfile(request)
         }
     }
 }
