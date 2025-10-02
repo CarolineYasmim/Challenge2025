@@ -60,7 +60,6 @@ class CalendarViewModel @Inject constructor(
 
             if (result is Resource.Success) {
                 _weekCheckins.value = result.data
-                    // Use o objeto FeelingsData aqui
                     ?.map { dto -> dto.toDomainModel(FeelingsData.availableFeelings) }
                     ?.associateBy { it.date } ?: emptyMap()
             } else {
@@ -73,11 +72,10 @@ class CalendarViewModel @Inject constructor(
         viewModelScope.launch {
             _statistics.value = Resource.Loading()
 
-            // Busca as estatísticas dos últimos 7 dias, como na documentação
+
             val result = checkinRepository.getCheckinStatistics(7)
 
             if (result is Resource.Success && result.data != null) {
-                // Usa o novo "tradutor" de estatísticas
                 _statistics.value = Resource.Success(result.data.toDomainModel())
             } else if (result is Resource.Error) {
                 _statistics.value = Resource.Error(result.message ?: "Erro desconhecido")
@@ -98,7 +96,7 @@ class CalendarViewModel @Inject constructor(
                     Locale.forLanguageTag("pt-BR")
                 ).first().toString(),
                 isToday = currentDate == LocalDate.now(),
-                isSelected = currentDate == _selectedDate.value // A seleção é baseada no _selectedDate
+                isSelected = currentDate == _selectedDate.value
             )
         }
         return CalendarWeek(
@@ -109,7 +107,6 @@ class CalendarViewModel @Inject constructor(
     }
 
     init {
-        // MUDANÇA 3: Chamar AMBAS as funções de busca quando o ViewModel é iniciado
         viewModelScope.launch {
             _currentWeek.collect { week ->
                 loadCheckinsForWeek(week)

@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
-// Estado que a UI vai observar. Contém tudo que a tela precisa.
 data class DashboardUiState(
     val selectedPeriod: TimePeriod = TimePeriod.WEEKLY,
     val dashboardData: DashboardData? = null,
@@ -36,32 +35,26 @@ class DashboardViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(DashboardUiState())
     val uiState = _uiState.asStateFlow()
 
-    // Guarda a lista completa de resultados de testes para não ter que buscar toda hora
     private var allTestResults: List<ResultadoResponseDto> = emptyList()
 
     init {
-        // Busca todos os dados necessários quando o ViewModel é criado
         fetchAllInitialData()
     }
 
-    // Função chamada pela UI para trocar o período (Semanal, Mensal, Anual)
     fun setPeriod(period: TimePeriod) {
         if (period != _uiState.value.selectedPeriod) {
-            // Apenas processa os dados que já temos, sem nova chamada de API para os testes
             processDataForPeriod(period)
         }
     }
 
-    // Busca os dados que não dependem de período (no caso, o histórico completo de testes)
     private fun fetchAllInitialData() {
         _uiState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
             val testResultsResult = dashboardRepository.getTestResults()
 
             if (testResultsResult is Resource.Success && testResultsResult.data != null) {
-                // Guarda a lista completa na memória do ViewModel
+
                 allTestResults = testResultsResult.data
-                // Processa os dados para o período inicial (Semanal)
                 processDataForPeriod(TimePeriod.WEEKLY)
             } else {
                 _uiState.update { it.copy(isLoading = false, error = testResultsResult.message ?: "Falha ao buscar resultados dos testes.") }
@@ -69,7 +62,6 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    // Processa os dados para o período selecionado
     private fun processDataForPeriod(period: TimePeriod) {
         _uiState.update { it.copy(isLoading = true, selectedPeriod = period) }
         viewModelScope.launch {
@@ -79,7 +71,7 @@ class DashboardViewModel @Inject constructor(
                 TimePeriod.YEARLY -> 365
             }
 
-            // --- Filtro dos Testes no Front-end ---
+
             val now = ZonedDateTime.now()
             val startDate = now.minusDays(days.toLong())
             val filteredTestResults = allTestResults.filter {
@@ -87,11 +79,11 @@ class DashboardViewModel @Inject constructor(
                 catch (e: Exception) { false }
             }
 
-            // A busca de estatísticas de check-in é feita na API com o filtro de dias
+
             val statisticsResult = dashboardRepository.getStatistics(days)
 
             if (statisticsResult is Resource.Success && statisticsResult.data != null) {
-                // Usa os mappers para traduzir e montar o objeto final
+
                 val dashboardData = DashboardData(
                     wellbeingPanel = filteredTestResults.toWellbeingPanelModel(),
                     periodFeelingSummary = statisticsResult.data.toPeriodFeelingSummaryModel(),
@@ -106,7 +98,6 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    // Manteremos as recomendações mockadas por enquanto
     private fun generateMockRecommendations(results: List<ResultadoResponseDto>): List<Recommendation> {
         val latestBurnout = results.filter { it.testType.equals("BURNOUT", true) }.maxByOrNull { it.completionDate }
         if (latestBurnout?.riskLevel?.equals("Alto", true) == true) {

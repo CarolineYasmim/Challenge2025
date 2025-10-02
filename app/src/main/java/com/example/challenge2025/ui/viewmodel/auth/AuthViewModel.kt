@@ -63,7 +63,6 @@ class AuthViewModel @Inject constructor(
                 )
                 onSuccess()
             } catch (e: Exception) {
-                // Aqui podemos capturar melhor o erro do backend
                 val errorMessage = e.message ?: "Erro desconhecido"
                 _authState.value = _authState.value.copy(emailError = errorMessage)
             }

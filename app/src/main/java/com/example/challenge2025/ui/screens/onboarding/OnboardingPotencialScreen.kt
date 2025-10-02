@@ -37,7 +37,6 @@ fun PotentialScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // O componente do gráfico agora é o elemento visual principal
             PotentialChart(
                 modifier = Modifier.padding(top = 32.dp),
                 motivations = state.selectedMotivations.toList()

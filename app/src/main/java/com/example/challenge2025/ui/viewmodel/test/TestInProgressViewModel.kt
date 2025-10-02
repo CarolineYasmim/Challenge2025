@@ -35,7 +35,6 @@ class TestInProgressViewModel @Inject constructor(
     private val _currentQuestionIndex = MutableStateFlow(0)
     val currentQuestionIndex = _currentQuestionIndex.asStateFlow()
 
-    // MUDANÇA: Novo estado para guardar o RESULTADO FINAL "limpo"
     private val _finalResultState = MutableStateFlow<Resource<UserTestResult>>(Resource.Loading())
     val finalResultState = _finalResultState.asStateFlow()
 
@@ -77,7 +76,6 @@ class TestInProgressViewModel @Inject constructor(
             )
             val result = resultRepository.submitTestResult(request)
 
-            // Quando a resposta chegar, a traduzimos e guardamos no novo estado
             if (result is Resource.Success && result.data != null) {
                 _finalResultState.value = Resource.Success(result.data.toDomainModel())
             } else if (result is Resource.Error) {

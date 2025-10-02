@@ -1,4 +1,3 @@
-// ViewModel/CheckinViewModel.kt
 package com.example.challenge2025.ui.viewmodel.home
 
 import androidx.lifecycle.ViewModel
@@ -33,13 +32,11 @@ class CheckinViewModel @Inject constructor(
     private val _submitState = MutableStateFlow<Resource<Unit>?>(null)
     val submitState: StateFlow<Resource<Unit>?> = _submitState.asStateFlow()
 
-    // mudar esse trecho caso backend dizer que não é por semana
     private val _weekCheckins = MutableStateFlow<Map<LocalDate, UserCheckin>>(emptyMap())
     val weekCheckins: StateFlow<Map<LocalDate, UserCheckin>> = _weekCheckins.asStateFlow()
 
     val availableFeelings = FeelingsData.availableFeelings
 
-    // --- função deve ser alterada se o sudré confirmar outro jei
     fun loadCheckinsForWeek(week: CalendarWeek) {
         viewModelScope.launch {
             val formatter = DateTimeFormatter.ISO_LOCAL_DATE
@@ -77,14 +74,20 @@ class CheckinViewModel @Inject constructor(
             _submitState.value = Resource.Loading()
 
             val request = CheckInDiarioRequestDto(
-                feelingIds = _selectedFeelings.value.map { it.id }, // Envia só os IDs
+                feelingIds = _selectedFeelings.value.map { it.id },
                 notes = _checkinNotes.value.ifBlank { null }
             )
 
             val result = repository.postCheckin(request)
-            _submitState.value = result
 
-            // Se deu sucesso, limpa os campos para o próximo check-in
+
+            _submitState.value = when (result) {
+                is Resource.Success -> Resource.Success(Unit)
+                is Resource.Error -> Resource.Error(result.message)
+                is Resource.Loading -> Resource.Loading()
+            }
+
+
             if (result is Resource.Success) {
                 _selectedFeelings.value = emptyList()
                 _checkinNotes.value = ""

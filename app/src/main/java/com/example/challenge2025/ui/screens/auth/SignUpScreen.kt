@@ -22,8 +22,7 @@ import com.example.challenge2025.ui.viewmodel.auth.AuthViewModel
 
 @Composable
 fun SignUpScreen(
-    // MUDANÇA 1: Remover o NavController e receber um lambda de evento
-    onSignUpSuccess: () -> Unit,
+     onSignUpSuccess: () -> Unit,
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.authState.collectAsState()
@@ -46,12 +45,11 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // ... (Seus AuthTextFields permanecem iguais)
                 AuthTextField(
                     value = state.name,
                     onValueChange = authViewModel::onNameChange,
                     label = "Seu nome ou apelido",
-                    isError = state.nameError.isNotEmpty(), // Corrigido
+                    isError = state.nameError.isNotEmpty(),
                     errorMessage = state.nameError
                 )
 
@@ -77,8 +75,6 @@ fun SignUpScreen(
             RoundedButton(
                 text = "Criar conta",
                 onClick = {
-                    // MUDANÇA 2: A lógica de navegação foi removida daqui
-                    // A tela agora apenas chama o ViewModel e avisa quando o cadastro deu certo
                     authViewModel.signUp {
                         onSignUpSuccess()
                     }

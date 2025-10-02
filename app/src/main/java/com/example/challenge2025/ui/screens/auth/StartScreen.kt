@@ -22,8 +22,7 @@ import com.example.challenge2025.ui.components.auth.RoundedButton
 
 @Composable
 fun StartScreen(
-    // MUDANÇA 1: Remover o NavController e receber lambdas de eventos
-    onLoginClick: () -> Unit,
+     onLoginClick: () -> Unit,
     onSignUpClick: () -> Unit
 ) {
     Box(
@@ -66,7 +65,6 @@ fun StartScreen(
 
             RoundedButton(
                 text = "Cadastrar",
-                // MUDANÇA 2: Chamar o lambda onSignUpClick
                 onClick = onSignUpClick,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -88,7 +86,6 @@ fun StartScreen(
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyMedium,
-                    // MUDANÇA 3: Chamar o lambda onLoginClick
                     modifier = Modifier.clickable(onClick = onLoginClick)
                 )
             }

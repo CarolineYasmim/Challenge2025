@@ -27,13 +27,11 @@ import com.example.challenge2025.ui.viewmodel.dashboard.DashboardViewModel
 
 @Composable
 fun DashboardScreen(
-    // MUDANÇA 1: Usar hiltViewModel() para garantir a injeção correta
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold { paddingValues ->
-        // Exibe um erro de tela cheia se houver um problema e não tiver dados
         if (uiState.error != null && uiState.dashboardData == null) {
             Box(
                 modifier = Modifier.fillMaxSize().padding(paddingValues),
@@ -42,7 +40,6 @@ fun DashboardScreen(
                 Text(uiState.error ?: "Ocorreu um erro desconhecido.")
             }
         }
-        // Exibe a tela principal, mesmo que esteja carregando novos dados de período
         else {
             LazyColumn(
                 modifier = Modifier
@@ -57,7 +54,6 @@ fun DashboardScreen(
                     )
                 }
 
-                // Mostra um loading geral no topo se estiver buscando dados
                 if (uiState.isLoading) {
                     item {
                         Box(
@@ -69,7 +65,6 @@ fun DashboardScreen(
                     }
                 }
 
-                // Mostra os dados se não estiver em estado de erro inicial
                 uiState.dashboardData?.let { data ->
                     item {
                         WellbeingPanel(panel = data.wellbeingPanel)
@@ -84,7 +79,6 @@ fun DashboardScreen(
                         PsychosocialTrendCard(trendData = data.psychosocialTrend)
                     }
                     item {
-                        // MUDANÇA 2: Passar os dados necessários para o EmotionalJourney
                         EmotionalJourney(summary = data.periodFeelingSummary)
                     }
                     item {

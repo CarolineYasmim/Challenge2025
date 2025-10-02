@@ -32,8 +32,7 @@ fun CompanyInfoScreen(
     totalSteps: Int
 ) {
     val state by userViewModel.onboardingState.collectAsState()
-    // O passo foi corrigido para 5, de acordo com o OnboardingFlow
-    val currentStep = 5
+     val currentStep = 5
 
     StepLayout(
         navController = navController,
@@ -66,7 +65,6 @@ fun CompanyInfoScreen(
                 )
             }
 
-            // --- SEÇÃO DO CHECKBOX E BOTÃO ---
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TermsAndConditionsCheckbox(
                     checked = state.termsAccepted,
@@ -76,8 +74,7 @@ fun CompanyInfoScreen(
                 RoundedButton(
                     text = "Entendi",
                     onClick = { userViewModel.nextStep() },
-                    // O botão agora depende da aceitação dos termos
-                    enabled = state.termsAccepted,
+                   enabled = state.termsAccepted,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 40.dp)
@@ -89,7 +86,6 @@ fun CompanyInfoScreen(
 
 @Composable
 private fun InfoCard(icon: ImageVector, text: String) {
-    // O código do InfoCard permanece o mesmo
     val isDarkTheme = isSystemInDarkTheme()
 
     val containerColor = if (isDarkTheme) {
@@ -129,7 +125,6 @@ private fun InfoCard(icon: ImageVector, text: String) {
     }
 }
 
-// --- COMPONENTE DO CHECKBOX ---
 @Composable
 private fun TermsAndConditionsCheckbox(
     checked: Boolean,
@@ -165,7 +160,6 @@ private fun TermsAndConditionsCheckbox(
             text = annotatedString,
             style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface),
             onClick = { offset ->
-                // TODO: Adicionar navegação para as telas de Termos e Privacidade
             }
         )
     }

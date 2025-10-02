@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
-import com.example.challenge2025.model.user.User
+import com.example.challenge2025.domain.model.user.User
 
 @Composable
 fun AvatarImage(

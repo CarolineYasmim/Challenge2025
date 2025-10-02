@@ -15,7 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.challenge2025.model.user.User
+import com.example.challenge2025.domain.model.user.User
 import com.example.challenge2025.ui.components.assets.AvatarImage
 
 @Composable

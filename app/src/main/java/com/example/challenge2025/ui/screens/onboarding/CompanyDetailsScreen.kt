@@ -51,7 +51,6 @@ fun CompanyDetailsScreen(
             state.company != "Não estou trabalhando" &&
             state.company != "Trabalho por conta própria"
 
-    // Data formatter e estado do input com máscara
     val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     var entryDateInput by remember {
         mutableStateOf(state.entryDate?.format(dateFormatter) ?: "")
@@ -77,7 +76,6 @@ fun CompanyDetailsScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // --- Empresa (editável + dropdown) ---
                 ExposedDropdownMenuBox(
                     expanded = companyExpanded,
                     onExpandedChange = { companyExpanded = !it }
@@ -118,7 +116,6 @@ fun CompanyDetailsScreen(
                 }
 
 
-                // --- Setor (editável + dropdown) ---
                 ExposedDropdownMenuBox(
                     expanded = departmentExpanded,
                     onExpandedChange = { if (areDetailsEnabled) departmentExpanded = !it }
@@ -157,7 +154,6 @@ fun CompanyDetailsScreen(
                     }
                 }
 
-                // --- Cargo (editável + dropdown) ---
                 ExposedDropdownMenuBox(
                     expanded = roleExpanded,
                     onExpandedChange = { if (areDetailsEnabled) roleExpanded = !it }
@@ -196,13 +192,11 @@ fun CompanyDetailsScreen(
                     }
                 }
 
-                // --- Data de Entrada (campo texto com máscara dd/MM/yyyy) ---
                 AuthTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = entryDateInput,
                     onValueChange = { input ->
-                        // mantém só dígitos e monta com slashes automaticamente
-                        val digits = input.filter { it.isDigit() }.take(8)
+                         val digits = input.filter { it.isDigit() }.take(8)
                         val sb = StringBuilder()
                         for (i in digits.indices) {
                             sb.append(digits[i])
@@ -211,11 +205,9 @@ fun CompanyDetailsScreen(
                         val formatted = sb.toString()
                         entryDateInput = if (formatted.length <= 10) formatted else formatted.substring(0, 10)
 
-                        // validação apenas quando já tem 10 chars (dd/MM/yyyy)
                         if (entryDateInput.length == 10) {
                             try {
                                 val parsed = LocalDate.parse(entryDateInput, dateFormatter)
-                                // só atualiza o viewModel quando a data for válida
                                 userViewModel.onEntryDateChange(parsed)
                                 entryDateError = null
                             } catch (_: DateTimeParseException) {

@@ -60,7 +60,6 @@ fun TestsScreen(
             is Resource.Success -> {
                 val allTests = state.data ?: emptyList()
 
-                // MUDANÇA: Não há mais separação. Usamos um único TestListContainer.
                 if (allTests.isNotEmpty()) {
                     TestListContainer(
                         title = "Testes Disponíveis",

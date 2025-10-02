@@ -72,7 +72,6 @@ class MainActivity : ComponentActivity() {
                             startDestination = "start_screen",
                             modifier = Modifier.padding(innerPadding)
                         ) {
-                            // MUDANÇA 2: As telas de Auth agora recebem lambdas para navegação
                             composable("start_screen") {
                                 StartScreen(
                                     onLoginClick = { navController.navigate("login") },
@@ -85,7 +84,6 @@ class MainActivity : ComponentActivity() {
                                     onLoginSuccess = { isFirstLogin ->
                                         val destination = if (isFirstLogin) "onboarding_route" else "home"
                                         navController.navigate(destination) {
-                                            // Limpa a pilha de navegação para que o usuário não possa voltar para a tela de login
                                             popUpTo("start_screen") { inclusive = true }
                                         }
                                     }
@@ -122,19 +120,16 @@ class MainActivity : ComponentActivity() {
                                     onNavigateToLanguage = { /* navController.navigate("language_route") */ },
                                     onNavigateToHelpCenter = { /* navController.navigate("help_center_route") */ },
                                     onLogout = {
-                                        // Lógica para deslogar e navegar para a tela inicial
                                         navController.navigate("start_screen") {
-                                            popUpTo(0) // Limpa toda a pilha de navegação
+                                            popUpTo(0)
                                         }
                                     }
                                 )
                             }
                             composable("checkin/{date}") { backStackEntry ->
-                                // 1. Buscamos a data que veio na rota de navegação
                                 val dateString = backStackEntry.arguments?.getString("date")
                                 val date = if (dateString != null) LocalDate.parse(dateString) else LocalDate.now()
 
-                                // 2. Passamos a data para a tela
                                 CheckinScreen(
                                     date = date,
                                     onClose = { navController.popBackStack() },
@@ -142,7 +137,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
 
-                            // MUDANÇA 3: O fluxo de teste está ajustado e usa a função sharedViewModel
+
                             navigation(
                                 route = "test_flow/{testId}",
                                 startDestination = "testDescription/{testId}"
@@ -185,7 +180,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// MUDANÇA 4: A função sharedViewModel agora está correta e funcional
+
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavController): T {
     val navGraphRoute = destination.parent?.route ?: return hiltViewModel()

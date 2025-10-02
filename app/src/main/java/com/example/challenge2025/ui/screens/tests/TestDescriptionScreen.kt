@@ -29,17 +29,15 @@ import com.example.challenge2025.ui.viewmodel.test.TestDetailViewModel
 fun TestDescriptionScreen(
     onStartTest: () -> Unit,
     onExit: () -> Unit,
-    // MUDANÇA 1: O ViewModel é injetado via Hilt
+
     viewModel: TestDetailViewModel = hiltViewModel()
 ) {
-    // MUDANÇA 2: Coletar os estados do ViewModel
     val detailState by viewModel.testDetailState.collectAsState()
     val startAttemptState by viewModel.startAttemptState.collectAsState()
 
-    // MUDANÇA 3: Efeito que "ouve" o estado de início da tentativa
+
     LaunchedEffect(startAttemptState) {
         if (startAttemptState is Resource.Success) {
-            // Quando a tentativa for criada com sucesso, navega para a tela de perguntas
             onStartTest()
         }
     }
@@ -53,7 +51,6 @@ fun TestDescriptionScreen(
         BackButton(onClick = onExit)
         Spacer(modifier = Modifier.height(16.dp))
 
-        // MUDANÇA 4: Usar 'when' para exibir a UI de acordo com o estado da busca
         when (val state = detailState) {
             is Resource.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -68,7 +65,7 @@ fun TestDescriptionScreen(
             is Resource.Success -> {
                 val testDetail = state.data
                 if (testDetail != null) {
-                    // O conteúdo visual da sua tela agora fica dentro do 'Success'
+
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -104,9 +101,7 @@ fun TestDescriptionScreen(
 
                     ContinueButton(
                         text = "Iniciar teste",
-                        // MUDANÇA 5: O botão agora chama o ViewModel
                         onClick = { viewModel.startTestAttempt() },
-                        // Desabilita o botão enquanto a tentativa está sendo criada
                         enabled = startAttemptState !is Resource.Loading,
                         modifier = Modifier
                             .fillMaxWidth()

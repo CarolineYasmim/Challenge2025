@@ -37,7 +37,7 @@ fun OnboardingFlow(
             3 -> PotentialScreen(navController, userViewModel, totalSteps)
             4 -> CompanyInfoScreen(navController, userViewModel, totalSteps)
             5 -> CompanyDetailsScreen(navController, userViewModel, totalSteps)
-            6 -> FinalScreen(navController, authViewModel)
+            6 -> FinalScreen(navController)
             else -> {}
         }
     }

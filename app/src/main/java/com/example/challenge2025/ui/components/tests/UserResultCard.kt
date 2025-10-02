@@ -1,6 +1,5 @@
 package com.example.challenge2025.ui.components.tests
 
-//noinspection SuspiciousImport
 import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -49,7 +48,6 @@ fun UserResultCard(
         elevation = cardElevation
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Header: título e badge
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -70,7 +68,6 @@ fun UserResultCard(
                     )
                 }
 
-                // badge nível
                 val levelColor = when (result.level.lowercase()) {
                     "alto" -> Color(0xFFD32F2F)
                     "moderado" -> Color(0xFFFFA000)
@@ -95,7 +92,6 @@ fun UserResultCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Mensagem acolhedora
             Text(
                 text = friendlyMessage(result),
                 style = MaterialTheme.typography.bodyLarge,
@@ -104,7 +100,6 @@ fun UserResultCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Recomendações dinâmicas
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "O que você pode fazer agora",
@@ -121,7 +116,6 @@ fun UserResultCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Botões de apoio
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -149,7 +143,6 @@ fun UserResultCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Rodapé: timestamp
             val sdf = SimpleDateFormat("dd/MM/yyyy 'às' HH:mm", Locale.getDefault())
             val dateText = try { sdf.format(Date(result.timestamp)) } catch (t: Throwable) { "" }
 

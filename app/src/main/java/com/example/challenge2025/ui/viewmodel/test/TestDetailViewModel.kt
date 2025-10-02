@@ -19,18 +19,18 @@ import javax.inject.Inject
 class TestDetailViewModel @Inject constructor(
     private val testRepository: TestRepository,
     private val testAttemptRepository: TestAttemptRepository,
-    savedStateHandle: SavedStateHandle // Objeto especial do Hilt para pegar parâmetros da navegação
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    // Estado para guardar os detalhes do teste (Nome, Descrição, etc.)
+
     private val _testDetailState = MutableStateFlow<Resource<TestDetail>>(Resource.Loading())
     val testDetailState = _testDetailState.asStateFlow()
 
-    // Estado para controlar a ação de "iniciar tentativa" e guardar o ID da tentativa criada
+
     private val _startAttemptState = MutableStateFlow<Resource<String>?>(null)
     val startAttemptState = _startAttemptState.asStateFlow()
 
-    // Pega o 'testId' que foi passado como argumento na navegação (ex: "testDescription/{testId}")
+
     private val testId: String = checkNotNull(savedStateHandle["testId"])
 
     init {

@@ -20,7 +20,6 @@ import com.example.challenge2025.ui.viewmodel.auth.AuthViewModel
 
 @Composable
 fun LoginScreen(
-    // MUDANÇA 1: Remover o NavController e receber lambdas de eventos
     onLoginSuccess: (isFirstLogin: Boolean) -> Unit,
     onNavigateToSignUp: () -> Unit,
     authViewModel: AuthViewModel = hiltViewModel()
@@ -56,9 +55,7 @@ fun LoginScreen(
         RoundedButton(
             text = "Entrar",
             onClick = {
-                // MUDANÇA 2: A lógica de navegação foi removida daqui
-                // A tela agora apenas chama o ViewModel e repassa o resultado para o callback
-                authViewModel.login { isFirstLogin ->
+                 authViewModel.login { isFirstLogin ->
                     onLoginSuccess(isFirstLogin)
                 }
             }
@@ -70,7 +67,6 @@ fun LoginScreen(
             text = "Não possui uma conta?\nClique aqui para criar uma",
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
-            // MUDANÇA 3: O clique agora chama o callback
             modifier = Modifier.clickable { onNavigateToSignUp() }
         )
     }

@@ -33,8 +33,7 @@ fun HomeScreen(
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel()
 ) {
-    // Coletando os estados necessários
-    val selectedDate by calendarViewModel.selectedDate.collectAsState()
+     val selectedDate by calendarViewModel.selectedDate.collectAsState()
     val currentWeek by calendarViewModel.currentWeek.collectAsState()
     val currentUser by userViewModel.currentUser.collectAsState()
     val weekCheckins by calendarViewModel.weekCheckins.collectAsState()
@@ -61,8 +60,7 @@ fun HomeScreen(
             }
         )
 
-        // Passa o dado real (ou nulo) para o CheckinHistory
-        CheckinHistory(
+       CheckinHistory(
             selectedDate = selectedDate,
             checkin = checkinForSelectedDate,
             onCheckinClick = {
@@ -72,8 +70,7 @@ fun HomeScreen(
 
         when (val state = statisticsState) {
             is Resource.Loading -> {
-                // Mostra um indicador de carregamento enquanto busca as estatísticas
-                Box(
+                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp),
@@ -83,11 +80,9 @@ fun HomeScreen(
                 }
             }
             is Resource.Success -> {
-                // Passa os dados para o componente WeeklyGoals
-                WeeklyGoals(statistics = state.data)
+                 WeeklyGoals(statistics = state.data)
             }
             is Resource.Error -> {
-                // Mostra uma mensagem de erro
                 Text(text = state.message ?: "Erro ao carregar metas.")
             }
         }

@@ -4,8 +4,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,33 +18,38 @@ import androidx.compose.material.icons.rounded.Business
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.challenge2025.domain.util.Resource
 import com.example.challenge2025.ui.components.menu.ActivityHistory
 import com.example.challenge2025.ui.components.menu.ProfileHeader
 import com.example.challenge2025.ui.components.menu.SettingItem
 import com.example.challenge2025.ui.components.menu.SettingType
 import com.example.challenge2025.ui.components.menu.SettingsGroup
 import com.example.challenge2025.ui.viewmodel.auth.AuthViewModel
+import com.example.challenge2025.ui.viewmodel.menu.MenuViewModel
 import com.example.challenge2025.ui.viewmodel.user.UserViewModel
 
 @Composable
 fun MenuScreen(
-    // MUDANÇA 1: Receber lambdas para as ações de navegação
     onNavigateToPersonalData: () -> Unit,
     onNavigateToCompanyData: () -> Unit,
     onNavigateToLanguage: () -> Unit,
     onNavigateToHelpCenter: () -> Unit,
     onLogout: () -> Unit
 ) {
-    // MUDANÇA 2: Obter os ViewModels diretamente aqui com Hilt
     val userViewModel: UserViewModel = hiltViewModel()
     val authViewModel: AuthViewModel = hiltViewModel()
+    val menuViewModel: MenuViewModel = hiltViewModel()
+
     val currentUser by userViewModel.currentUser.collectAsState()
+    val activityHistoryState by menuViewModel.activityHistoryState.collectAsState()
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -53,7 +60,6 @@ fun MenuScreen(
         }
     )
 
-    // MUDANÇA 3: Ações de clique agora chamam os lambdas recebidos
     val accountItems = listOf(
         SettingItem("Dados Pessoais", Icons.Rounded.Person, SettingType.NAVIGATION, onClick = onNavigateToPersonalData),
         SettingItem("Dados Corporativos", Icons.Rounded.Business, SettingType.NAVIGATION, onClick = onNavigateToCompanyData)
@@ -86,7 +92,26 @@ fun MenuScreen(
             },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        ActivityHistory(modifier = Modifier.padding(horizontal = 16.dp))
+
+        when (val state = activityHistoryState) {
+            is Resource.Loading -> {
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            is Resource.Success -> {
+                ActivityHistory(
+                    activityMap = state.data ?: emptyMap(),
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+            is Resource.Error -> {
+                 }
+        }
+
         SettingsGroup(title = "CONTA", items = accountItems)
         SettingsGroup(title = "PREFERÊNCIAS", items = preferencesItems)
         SettingsGroup(title = "SUPORTE", items = supportItems)

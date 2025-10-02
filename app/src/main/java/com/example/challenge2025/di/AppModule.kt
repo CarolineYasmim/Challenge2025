@@ -2,6 +2,7 @@ package com.example.challenge2025.di
 
 import android.content.Context
 import com.example.challenge2025.data.local.AuthPreferences
+import com.example.challenge2025.data.local.UserPreferences
 import com.example.challenge2025.data.remote.ApiService
 import com.example.challenge2025.data.remote.AuthInterceptor
 import com.example.challenge2025.domain.repository.AuthRepository
@@ -67,6 +68,12 @@ abstract class AppModule {
         @Singleton
         fun provideAuthPreferences(@ApplicationContext context: Context): AuthPreferences {
             return AuthPreferences(context)
+        }
+
+        @Provides
+        @Singleton
+        fun provideUserPreferences(@ApplicationContext context: Context): UserPreferences {
+            return UserPreferences(context)
         }
 
         @Provides

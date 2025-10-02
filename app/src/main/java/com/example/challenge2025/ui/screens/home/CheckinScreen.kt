@@ -72,10 +72,9 @@ fun CheckinScreen(
     LaunchedEffect(submitState) {
         val result = submitState
         if (result is Resource.Success) {
-            onSubmit() // Chama a função de callback para fechar a tela
+            onSubmit()
         }
         if (result is Resource.Error) {
-            // No futuro, você pode mostrar um Snackbar de erro aqui
             println("Erro: ${result.message}")
         }
     }

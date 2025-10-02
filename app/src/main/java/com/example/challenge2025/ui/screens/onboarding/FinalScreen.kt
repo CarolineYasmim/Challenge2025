@@ -36,19 +36,17 @@ fun FinalScreen(
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painter = painterResource(id = R.drawable.sori_congratulation), // Lembre-se de adicionar este drawable
+                painter = painterResource(id = R.drawable.sori_congratulation),
                 contentDescription = "Sori parabenizando o usuário",
                 modifier = Modifier
-                    // --- IMAGEM AUMENTADA ---
-                    .fillMaxWidth() // Ocupa a largura
-                    .height(450.dp)   // Altura ajustada para a proporção
+                     .fillMaxWidth()
+                    .height(450.dp)
             )
             Spacer(modifier = Modifier.height(40.dp))
 
             BigTitle(text = "Tudo pronto!")
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- TEXTO CORRIGIDO PARA O CONTEXTO ---
             Text(
                 text = "Sua jornada de autoconhecimento começa agora. Estamos aqui para te apoiar em cada passo.",
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
@@ -60,7 +58,7 @@ fun FinalScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         RoundedButton(
-            text = "Começar a usar", // Texto do botão mais convidativo
+            text = "Começar a usar",
             onClick = {
                     navController.navigate("home") {
                         popUpTo("onboarding_route") { inclusive = true }

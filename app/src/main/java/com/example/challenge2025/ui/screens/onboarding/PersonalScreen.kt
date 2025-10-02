@@ -39,7 +39,6 @@ fun PersonalScreen(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // --- SELETOR DE IDADE SUBSTITUÍDO POR AuthTextField ---
                 Text(
                     text = "Qual é a sua idade?",
                     fontWeight = FontWeight.Bold,
@@ -55,7 +54,6 @@ fun PersonalScreen(
                     isError = state.ageError != null,
                     errorMessage = state.ageError
                 )
-                // ----------------------------------------------------
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -75,8 +73,7 @@ fun PersonalScreen(
             RoundedButton(
                 text = "Próximo",
                 onClick = { userViewModel.nextStep() },
-                // A validação agora checa se a string da idade não está vazia
-                enabled = state.age.isNotBlank() && state.gender.isNotBlank(),
+                 enabled = state.age.isNotBlank() && state.gender.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 40.dp)

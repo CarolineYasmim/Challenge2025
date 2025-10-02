@@ -35,7 +35,6 @@ fun MotivationScreen(
         title = "O que te motiva a buscar apoio",
         subtitle = "Selecione as opções que mais se alinham aos seus objetivos. Você pode escolher mais de uma!"
     ) {
-        // A Column interna agora preenche a altura máxima disponível pelo AuthScreenLayout
         Column(
             modifier = Modifier
                 .fillMaxHeight()
@@ -43,16 +42,13 @@ fun MotivationScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
-                // Lembre-se de adicionar a imagem 'think_sori' à pasta drawable
                 painter = painterResource(id = R.drawable.think_sori),
                 contentDescription = "Sori pensando",
                 modifier = Modifier
-                    // Aumentando o tamanho da Sori
                     .size(150.dp)
             )
 
-            // A LazyColumn agora tem um 'weight' para ocupar o espaço entre a imagem e o botão
-            LazyColumn(
+             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
                     .padding(vertical = 24.dp),
@@ -67,7 +63,6 @@ fun MotivationScreen(
                 }
             }
 
-            // O botão "Próximo" fica na parte inferior
             RoundedButton(
                 text = "Próximo",
                 onClick = { userViewModel.nextStep() },

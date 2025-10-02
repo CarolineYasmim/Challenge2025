@@ -1,6 +1,6 @@
 package com.example.challenge2025.ui.components.tests
 
-import androidx.compose.foundation.layout.Arrangement // Importe o Arrangement
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +27,7 @@ fun TestListContainer(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Esta Column interna agrupará os cards e aplicará o espaçamento
+
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

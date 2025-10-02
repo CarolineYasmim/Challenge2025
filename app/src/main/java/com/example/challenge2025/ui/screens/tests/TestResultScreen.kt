@@ -32,10 +32,8 @@ import com.example.challenge2025.ui.viewmodel.test.TestInProgressViewModel
 @Composable
 fun TestResultScreen(
     onContinue: () -> Unit,
-    // A tela usa o ViewModel compartilhado, obtido via Hilt
     viewModel: TestInProgressViewModel = hiltViewModel()
 ) {
-    // Coleta o estado do resultado final do ViewModel
     val finalResultState by viewModel.finalResultState.collectAsState()
 
     Scaffold(

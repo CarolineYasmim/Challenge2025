@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.challenge2025.domain.model.tests.UserTestResult
 import com.example.challenge2025.domain.util.Resource
 import com.example.challenge2025.ui.components.assets.BackButton
 import com.example.challenge2025.ui.viewmodel.test.TestInProgressViewModel
@@ -28,14 +29,13 @@ fun TestQuestionScreen(
 ) {
     val testState by viewModel.testState.collectAsState()
     val questionIndex by viewModel.currentQuestionIndex.collectAsState()
-    val submitResultState by viewModel.submitResultState.collectAsState()
+    val submitResultState by viewModel.finalResultState.collectAsState()
 
-    // Navegação quando o resultado final chega
     LaunchedEffect(submitResultState) {
-        if (submitResultState is Resource.Success) {
-            val result = (submitResultState as Resource.Success).data
+        if (submitResultState is Resource.Success<*>) {
+            val result = (submitResultState as Resource.Success<UserTestResult>).data
             navController.navigate("testResult/${result?.testId}") {
-                popUpTo("testDescription/${result?.testId}") { inclusive = true }
+                popUpTo("tests") { inclusive = false }
             }
         }
     }
@@ -51,8 +51,9 @@ fun TestQuestionScreen(
             BackButton(onClick = { navController.popBackStack() })
             Spacer(modifier = Modifier.height(16.dp))
 
+            // CORREÇÃO 2: Adicionado <*> em todas as verificações de tipo
             when (val state = testState) {
-                is Resource.Loading -> {
+                is Resource.Loading<*> -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -61,11 +62,11 @@ fun TestQuestionScreen(
                     }
                 }
 
-                is Resource.Error -> {
+                is Resource.Error<*> -> {
                     Text(text = state.message ?: "Erro ao carregar as perguntas.")
                 }
 
-                is Resource.Success -> {
+                is Resource.Success<*> -> {
                     val testDetail = state.data
                     if (testDetail != null && questionIndex < testDetail.questions.size) {
                         val question = testDetail.questions[questionIndex]
@@ -122,9 +123,8 @@ fun TestQuestionScreen(
             }
         }
 
-        // Overlay de envio de resultado
         when (submitResultState) {
-            is Resource.Loading -> {
+            is Resource.Loading<*> -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -150,8 +150,8 @@ fun TestQuestionScreen(
                 }
             }
 
-            is Resource.Error -> {
-                val errorMessage = (submitResultState as Resource.Error).message
+            is Resource.Error<*> -> {
+                val errorMessage = (submitResultState as Resource.Error<*>).message
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -176,7 +176,6 @@ fun TestQuestionScreen(
                     }
                 }
             }
-
             else -> Unit
         }
     }
