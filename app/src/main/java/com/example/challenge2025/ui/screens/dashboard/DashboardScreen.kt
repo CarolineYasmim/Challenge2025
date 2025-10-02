@@ -3,6 +3,7 @@ package com.example.challenge2025.ui.screens.dashboard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -14,45 +15,62 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.challenge2025.ui.components.dashboard.DashboardHeader
 import com.example.challenge2025.ui.components.dashboard.EmotionalJourney
+import com.example.challenge2025.ui.components.dashboard.PeriodFeelingCard
 import com.example.challenge2025.ui.components.dashboard.PsychosocialTrendCard
 import com.example.challenge2025.ui.components.dashboard.Recommendations
 import com.example.challenge2025.ui.components.dashboard.RiskProfileCard
 import com.example.challenge2025.ui.components.dashboard.WellbeingPanel
-import com.example.challenge2025.ui.components.dashboard.PeriodFeelingCard
 import com.example.challenge2025.ui.viewmodel.dashboard.DashboardViewModel
 
 @Composable
 fun DashboardScreen(
-    viewModel: DashboardViewModel = viewModel()
+    // MUDANÇA 1: Usar hiltViewModel() para garantir a injeção correta
+    viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold { paddingValues ->
-        if (uiState.isLoading) {
+        // Exibe um erro de tela cheia se houver um problema e não tiver dados
+        if (uiState.error != null && uiState.dashboardData == null) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator()
+                Text(uiState.error ?: "Ocorreu um erro desconhecido.")
             }
-        } else {
-            uiState.dashboardData?.let { data ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
+        }
+        // Exibe a tela principal, mesmo que esteja carregando novos dados de período
+        else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item {
+                    DashboardHeader(
+                        selectedPeriod = uiState.selectedPeriod,
+                        onPeriodChange = viewModel::setPeriod
+                    )
+                }
+
+                // Mostra um loading geral no topo se estiver buscando dados
+                if (uiState.isLoading) {
                     item {
-                        DashboardHeader(
-                            selectedPeriod = uiState.selectedPeriod,
-                            onPeriodChange = { viewModel.setPeriod(it) }
-                        )
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
+                }
+
+                // Mostra os dados se não estiver em estado de erro inicial
+                uiState.dashboardData?.let { data ->
                     item {
                         WellbeingPanel(panel = data.wellbeingPanel)
                     }
@@ -66,20 +84,12 @@ fun DashboardScreen(
                         PsychosocialTrendCard(trendData = data.psychosocialTrend)
                     }
                     item {
-                        EmotionalJourney()
+                        // MUDANÇA 2: Passar os dados necessários para o EmotionalJourney
+                        EmotionalJourney(summary = data.periodFeelingSummary)
                     }
                     item {
                         RiskProfileCard(profile = data.riskProfile)
                     }
-                }
-            } ?: run {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Não foi possível carregar os dados do dashboard.")
                 }
             }
         }

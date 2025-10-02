@@ -3,16 +3,7 @@ package com.example.challenge2025.ui.screens.auth
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,13 +17,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.challenge2025.R
 import com.example.challenge2025.ui.components.auth.RoundedButton
 
 @Composable
 fun StartScreen(
-    navController: NavController
+    // MUDANÇA 1: Remover o NavController e receber lambdas de eventos
+    onLoginClick: () -> Unit,
+    onSignUpClick: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -74,9 +66,8 @@ fun StartScreen(
 
             RoundedButton(
                 text = "Cadastrar",
-                onClick = {
-                    navController.navigate("sign_up")
-                },
+                // MUDANÇA 2: Chamar o lambda onSignUpClick
+                onClick = onSignUpClick,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -97,9 +88,8 @@ fun StartScreen(
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.clickable {
-                        navController.navigate("Login")
-                    }
+                    // MUDANÇA 3: Chamar o lambda onLoginClick
+                    modifier = Modifier.clickable(onClick = onLoginClick)
                 )
             }
         }

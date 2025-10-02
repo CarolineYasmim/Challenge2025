@@ -3,7 +3,7 @@ package com.example.challenge2025.data.repository
 import com.example.challenge2025.data.remote.ApiService
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioRequestDto
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioResponseDto
-import com.example.challenge2025.data.remote.dto.checkin.EstatisticaSentimentoResponseDto
+import com.example.challenge2025.data.remote.dto.sentimentos.EstatisticaSentimentoResponseDto
 import com.example.challenge2025.domain.repository.CheckinRepository
 import com.example.challenge2025.domain.util.Resource
 import javax.inject.Inject

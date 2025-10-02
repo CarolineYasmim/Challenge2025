@@ -24,9 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.challenge2025.model.dashboard.FeelingPercentage
-import com.example.challenge2025.model.dashboard.PeriodFeelingSummary
 import androidx.core.graphics.toColorInt
+import com.example.challenge2025.domain.model.checkin.FeelingsData
+import com.example.challenge2025.domain.model.dashboard.FeelingPercentage
+import com.example.challenge2025.domain.model.dashboard.PeriodFeelingSummary
 
 @Composable
 fun PeriodFeelingCard(summary: PeriodFeelingSummary) {
@@ -84,7 +85,7 @@ fun PeriodFeelingCard(summary: PeriodFeelingSummary) {
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
                         Text(
-                            text = summary.mostFrequentFeeling?.name ?: "N/A",
+                            text = summary.mostFrequentFeeling,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -110,16 +111,21 @@ fun PeriodFeelingCard(summary: PeriodFeelingSummary) {
 @Composable
 fun FeelingDonutChart(summary: PeriodFeelingSummary, size: Dp) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.size(size)) {
-        summary.mostFrequentFeeling?.let { feeling ->
+        // Busca o objeto 'Feeling' completo para pegar o ícone e a cor
+        val frequentFeelingObject = FeelingsData.availableFeelings.find {
+            it.name.equals(summary.mostFrequentFeeling, ignoreCase = true)
+        }
+
+        if (frequentFeelingObject != null) {
             Image(
-                painter = painterResource(id = feeling.iconRes),
-                contentDescription = feeling.name,
+                painter = painterResource(id = frequentFeelingObject.iconRes),
+                contentDescription = frequentFeelingObject.name,
                 modifier = Modifier
                     .size(size / 2.5f)
                     .clip(CircleShape),
                 contentScale = ContentScale.Fit,
                 colorFilter = ColorFilter.tint(
-                    Color(feeling.colorHex.toColorInt())
+                    Color(frequentFeelingObject.colorHex.toColorInt())
                 )
             )
         }
@@ -176,7 +182,7 @@ fun FeelingDetailsDialog(
                             )
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(
-                                text = data.feeling.name,
+                                text = data.feelingName,
                                 modifier = Modifier.weight(1f),
                                 fontWeight = FontWeight.Bold
                             )

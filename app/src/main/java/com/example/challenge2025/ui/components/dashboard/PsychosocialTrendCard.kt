@@ -1,6 +1,6 @@
 package com.example.challenge2025.ui.components.dashboard
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,26 +22,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.challenge2025.model.dashboard.PsychosocialTrend
+import com.example.challenge2025.domain.model.dashboard.PsychosocialTrend
 
 @Composable
 fun PsychosocialTrendCard(trendData: PsychosocialTrend) {
     val isDarkTheme = isSystemInDarkTheme()
-
-    val cardColor = if (isDarkTheme) {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-    } else {
-        MaterialTheme.colorScheme.surface
-    }
-
-    val cardElevation = if (isDarkTheme) {
-        CardDefaults.cardElevation(4.dp)
-    } else {
-        CardDefaults.cardElevation(0.dp)
-    }
+    val cardColor = if (isDarkTheme) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface
+    val cardElevation = if (isDarkTheme) CardDefaults.cardElevation(4.dp) else CardDefaults.cardElevation(0.dp)
 
     Card(
         modifier = Modifier
@@ -52,7 +46,6 @@ fun PsychosocialTrendCard(trendData: PsychosocialTrend) {
         colors = CardDefaults.cardColors(containerColor = cardColor)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Título: Já segue o padrão (titleLarge, Bold).
             Text(
                 text = "Minhas Tendências",
                 style = MaterialTheme.typography.titleLarge,
@@ -60,41 +53,32 @@ fun PsychosocialTrendCard(trendData: PsychosocialTrend) {
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            val trendTypes = listOf("Ansiedade", "Burnout", "Depressão")
+            val trendTypes = trendData.trends.keys.toList()
             var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-            // Cor de fundo do TabRow adaptada para o tema
-            val tabRowContainerColor = if (isDarkTheme) Color.Transparent else MaterialTheme.colorScheme.surface
-            val tabContentColor = if (isDarkTheme) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary
-
-            TabRow(
-                selectedTabIndex = selectedTabIndex,
-                containerColor = tabRowContainerColor,
-                contentColor = tabContentColor,
-                divider = {}
-            ) {
-                trendTypes.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTabIndex == index,
-                        onClick = { selectedTabIndex = index },
-                        text = {
-                            Text(
-                                title,
-                                fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal
-                            )
-                        }
-                    )
+            if (trendTypes.isNotEmpty()) {
+                TabRow(
+                    selectedTabIndex = selectedTabIndex,
+                    containerColor = if (isDarkTheme) Color.Transparent else MaterialTheme.colorScheme.surface,
+                    contentColor = if (isDarkTheme) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
+                    divider = {}
+                ) {
+                    trendTypes.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTabIndex == index,
+                            onClick = { selectedTabIndex = index },
+                            text = { Text(title, fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal) }
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            val selectedTrend = trendData.trends[trendTypes[selectedTabIndex]]
+            val selectedTrend = trendData.trends[trendTypes.getOrNull(selectedTabIndex)]
 
             if (selectedTrend.isNullOrEmpty() || selectedTrend.size < 2) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
+                    modifier = Modifier.fillMaxWidth().height(200.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -103,28 +87,68 @@ fun PsychosocialTrendCard(trendData: PsychosocialTrend) {
                     )
                 }
             } else {
-                // Placeholder para o Gráfico de Linha
-                val placeholderBackgroundColor = if (isDarkTheme) {
-                    MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
-                } else {
-                    MaterialTheme.colorScheme.surfaceVariant
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .background(
-                            color = placeholderBackgroundColor,
-                            shape = RoundedCornerShape(12.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        "Gráfico de Linha para ${trendTypes[selectedTabIndex]}",
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                    )
-                }
+                // MUDANÇA: Substituímos o placeholder por nosso gráfico customizado
+                LineChart(
+                    data = selectedTrend,
+                    modifier = Modifier.fillMaxWidth().height(200.dp)
+                )
             }
+        }
+    }
+}
+
+// MUDANÇA: Novo componente de gráfico de linha nativo
+@Composable
+private fun LineChart(
+    data: List<Int>,
+    modifier: Modifier = Modifier
+) {
+    val lineColor = MaterialTheme.colorScheme.primary
+    val gradientColor = lineColor.copy(alpha = 0.2f)
+
+    Canvas(modifier = modifier) {
+        val (minY, maxY) = (data.minOrNull() ?: 0) to (data.maxOrNull() ?: 0)
+        val yRange = (maxY - minY).toFloat().coerceAtLeast(1f)
+        val xStep = size.width / (data.size - 1).toFloat()
+
+        val points = data.mapIndexed { index, value ->
+            val x = index * xStep
+            val y = size.height - ((value - minY) / yRange) * size.height
+            Offset(x, y)
+        }
+
+        // Desenha a área preenchida com gradiente
+        val path = Path().apply {
+            moveTo(0f, size.height)
+            points.forEach { lineTo(it.x, it.y) }
+            lineTo(size.width, size.height)
+            close()
+        }
+        drawPath(
+            path = path,
+            brush = Brush.verticalGradient(
+                colors = listOf(gradientColor, Color.Transparent)
+            )
+        )
+
+        // Desenha a linha
+        for (i in 0 until points.size - 1) {
+            drawLine(
+                color = lineColor,
+                start = points[i],
+                end = points[i + 1],
+                strokeWidth = 5f,
+                cap = StrokeCap.Round
+            )
+        }
+
+        // Desenha os pontos
+        points.forEach {
+            drawCircle(
+                color = lineColor,
+                radius = 8f,
+                center = it
+            )
         }
     }
 }

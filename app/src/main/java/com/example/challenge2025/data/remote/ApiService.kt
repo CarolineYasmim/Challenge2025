@@ -6,7 +6,7 @@ import com.example.challenge2025.data.remote.dto.auth.LoginResponseDto
 import com.example.challenge2025.data.remote.dto.auth.RegisterRequest
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioRequestDto
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioResponseDto
-import com.example.challenge2025.data.remote.dto.checkin.EstatisticaSentimentoResponseDto
+import com.example.challenge2025.data.remote.dto.sentimentos.EstatisticaSentimentoResponseDto
 import com.example.challenge2025.data.remote.dto.test.ResultadoRequestDto
 import com.example.challenge2025.data.remote.dto.test.ResultadoResponseDto
 import com.example.challenge2025.data.remote.dto.test.TentativaRequestDto
@@ -32,9 +32,6 @@ interface ApiService {
     @POST("/api/checkins")
     suspend fun postCheckin(@Body checkinRequest: CheckInDiarioRequestDto): Response<CheckInDiarioResponseDto>
 
-    @GET("/api/checkins/estatisticas")
-    suspend fun getCheckinStatistics(): Response<EstatisticaSentimentoResponseDto>
-
     @GET("/api/checkins")
     suspend fun getCheckinsForPeriod(
         @Query("dataInicial") startDate: String,
@@ -56,5 +53,9 @@ interface ApiService {
     @POST("/api/resultados")
     suspend fun submitTestResult(@Body resultRequest: ResultadoRequestDto): Response<ResultadoResponseDto>
 
+    @GET("/api/resultados")
+    suspend fun getAllTestResults(): Response<List<ResultadoResponseDto>>
+    @GET("/api/checkins/estatisticas")
+    suspend fun getCheckinStatistics(@Query("dias") days: Int): Response<EstatisticaSentimentoResponseDto>
 
 }

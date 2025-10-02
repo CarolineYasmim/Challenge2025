@@ -1,39 +1,24 @@
 package com.example.challenge2025.ui.components.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
+import com.example.challenge2025.domain.model.dashboard.PeriodFeelingSummary
+import com.example.challenge2025.ui.components.assets.BarChart
+import com.example.challenge2025.ui.components.assets.BarChartData
 
 @Composable
-fun EmotionalJourney() {
+fun EmotionalJourney(summary: PeriodFeelingSummary) { // MUDANÇA 1: Receber os dados
     val isDarkTheme = isSystemInDarkTheme()
-
-    val cardColor = if (isDarkTheme) {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-    } else {
-        MaterialTheme.colorScheme.surface
-    }
-
-    val cardElevation = if (isDarkTheme) {
-        CardDefaults.cardElevation(4.dp)
-    } else {
-        CardDefaults.cardElevation(0.dp)
-    }
+    val cardColor = if (isDarkTheme) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface
+    val cardElevation = if (isDarkTheme) CardDefaults.cardElevation(4.dp) else CardDefaults.cardElevation(0.dp)
 
     Card(
         modifier = Modifier
@@ -52,25 +37,26 @@ fun EmotionalJourney() {
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
-            // Placeholder para o gráfico
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    // NOVO: Condicional para o background do placeholder
-                    .background(
-                        color = if (isDarkTheme) {
-                            MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
-                        } else {
-                            MaterialTheme.colorScheme.surfaceVariant
-                        },
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
+
+            // MUDANÇA 2: Usar o gráfico real em vez do placeholder
+            if (summary.feelingPercentages.isEmpty()) {
                 Text(
-                    "Gráfico da Jornada Emocional",
+                    "Seus check-ins aparecerão aqui.",
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+            } else {
+                // Prepara os dados para o BarChart
+                val chartData = summary.feelingPercentages.map {
+                    BarChartData(
+                        value = it.count.toFloat(),
+                        label = it.feelingName,
+                        color = Color(it.color.toColorInt())
+                    )
+                }
+                BarChart(
+                    data = chartData,
+                    modifier = Modifier.fillMaxWidth().height(200.dp)
                 )
             }
         }

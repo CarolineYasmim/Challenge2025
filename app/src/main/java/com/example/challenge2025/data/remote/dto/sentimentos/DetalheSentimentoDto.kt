@@ -1,4 +1,4 @@
-package com.example.challenge2025.data.remote.dto.checkin
+package com.example.challenge2025.data.remote.dto.sentimentos
 
 import com.google.gson.annotations.SerializedName
 

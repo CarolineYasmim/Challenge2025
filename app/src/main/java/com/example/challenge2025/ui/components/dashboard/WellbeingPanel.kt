@@ -15,9 +15,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.challenge2025.model.dashboard.WellbeingPanel
+import com.example.challenge2025.domain.model.dashboard.WellbeingPanel
 import com.example.challenge2025.ui.theme.Green
-
 @Composable
 fun WellbeingPanel(panel: WellbeingPanel) {
     val isDarkTheme = isSystemInDarkTheme()

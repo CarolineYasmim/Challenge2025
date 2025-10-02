@@ -1,15 +1,14 @@
-// ARQUIVO NOVO: ui/viewmodel/test/TestInProgressViewModel.kt
-
 package com.example.challenge2025.ui.viewmodel.test
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.challenge2025.data.mappers.toDomainModel
 import com.example.challenge2025.data.remote.dto.test.RespostaUsuarioRequestDto
 import com.example.challenge2025.data.remote.dto.test.ResultadoRequestDto
-import com.example.challenge2025.data.remote.dto.test.ResultadoResponseDto
 import com.example.challenge2025.domain.model.tests.Question
 import com.example.challenge2025.domain.model.tests.TestDetail
+import com.example.challenge2025.domain.model.tests.UserTestResult
 import com.example.challenge2025.domain.repository.ResultRepository
 import com.example.challenge2025.domain.repository.TestRepository
 import com.example.challenge2025.domain.util.Resource
@@ -26,23 +25,19 @@ class TestInProgressViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    // Pega o 'testId' que foi passado como argumento na navegação
     private val testId: String = checkNotNull(savedStateHandle["testId"])
 
-    // Estado para guardar os detalhes do teste (incluindo a lista de perguntas)
     private val _testState = MutableStateFlow<Resource<TestDetail>>(Resource.Loading())
     val testState = _testState.asStateFlow()
 
-    // Lista interna para guardar as respostas que o usuário já deu
     private val userAnswersList = mutableListOf<RespostaUsuarioRequestDto>()
 
-    // Estado para controlar o índice da pergunta atual
     private val _currentQuestionIndex = MutableStateFlow(0)
     val currentQuestionIndex = _currentQuestionIndex.asStateFlow()
 
-    // Estado para controlar o ENVIO do resultado final
-    private val _submitResultState = MutableStateFlow<Resource<ResultadoResponseDto>?>(null)
-    val submitResultState = _submitResultState.asStateFlow()
+    // MUDANÇA: Novo estado para guardar o RESULTADO FINAL "limpo"
+    private val _finalResultState = MutableStateFlow<Resource<UserTestResult>>(Resource.Loading())
+    val finalResultState = _finalResultState.asStateFlow()
 
     init {
         loadTestQuestions()
@@ -54,9 +49,7 @@ class TestInProgressViewModel @Inject constructor(
         }
     }
 
-    // Função chamada pela UI quando o usuário seleciona uma resposta
     fun selectAnswer(question: Question, answerText: String, answerValue: Int) {
-        // Guarda a resposta do usuário no formato que a API de Resultados espera
         val newAnswer = RespostaUsuarioRequestDto(
             questionId = question.id,
             questionText = question.text,
@@ -65,28 +58,31 @@ class TestInProgressViewModel @Inject constructor(
         )
         userAnswersList.add(newAnswer)
 
-        // Avança para a próxima pergunta ou finaliza o teste
         val currentTest = _testState.value.data
         if (currentTest != null) {
             if (_currentQuestionIndex.value < currentTest.totalQuestions - 1) {
                 _currentQuestionIndex.value++
             } else {
-                // Chegou na última pergunta, chama a função para enviar o resultado
                 submitTestResult()
             }
         }
     }
 
-    // Função para enviar o resultado final para o backend
     private fun submitTestResult() {
         viewModelScope.launch {
-            _submitResultState.value = Resource.Loading()
+            _finalResultState.value = Resource.Loading()
             val request = ResultadoRequestDto(
                 testId = testId,
                 answers = userAnswersList
             )
-            // Chama a função que criamos no repositório
-            _submitResultState.value = resultRepository.submitTestResult(request)
+            val result = resultRepository.submitTestResult(request)
+
+            // Quando a resposta chegar, a traduzimos e guardamos no novo estado
+            if (result is Resource.Success && result.data != null) {
+                _finalResultState.value = Resource.Success(result.data.toDomainModel())
+            } else if (result is Resource.Error) {
+                _finalResultState.value = Resource.Error(result.message ?: "Erro desconhecido")
+            }
         }
     }
 }

@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.auth.AuthScreenLayout
 import com.example.challenge2025.ui.components.auth.AuthTextField
 import com.example.challenge2025.ui.components.auth.RoundedButton
@@ -23,7 +22,8 @@ import com.example.challenge2025.ui.viewmodel.auth.AuthViewModel
 
 @Composable
 fun SignUpScreen(
-    navController: NavController,
+    // MUDANÇA 1: Remover o NavController e receber um lambda de evento
+    onSignUpSuccess: () -> Unit,
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.authState.collectAsState()
@@ -46,12 +46,12 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
+                // ... (Seus AuthTextFields permanecem iguais)
                 AuthTextField(
                     value = state.name,
                     onValueChange = authViewModel::onNameChange,
                     label = "Seu nome ou apelido",
-                    isError = true,
+                    isError = state.nameError.isNotEmpty(), // Corrigido
                     errorMessage = state.nameError
                 )
 
@@ -77,11 +77,10 @@ fun SignUpScreen(
             RoundedButton(
                 text = "Criar conta",
                 onClick = {
+                    // MUDANÇA 2: A lógica de navegação foi removida daqui
+                    // A tela agora apenas chama o ViewModel e avisa quando o cadastro deu certo
                     authViewModel.signUp {
-                        // Após criar a conta, redireciona para login
-                        navController.navigate("login") {
-                            popUpTo("signup") { inclusive = true }
-                        }
+                        onSignUpSuccess()
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

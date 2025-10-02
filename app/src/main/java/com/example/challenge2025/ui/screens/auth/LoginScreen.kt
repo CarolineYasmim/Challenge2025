@@ -13,7 +13,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.auth.AuthScreenLayout
 import com.example.challenge2025.ui.components.auth.AuthTextField
 import com.example.challenge2025.ui.components.auth.RoundedButton
@@ -21,7 +20,9 @@ import com.example.challenge2025.ui.viewmodel.auth.AuthViewModel
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    // MUDANÇA 1: Remover o NavController e receber lambdas de eventos
+    onLoginSuccess: (isFirstLogin: Boolean) -> Unit,
+    onNavigateToSignUp: () -> Unit,
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.authState.collectAsState()
@@ -55,18 +56,10 @@ fun LoginScreen(
         RoundedButton(
             text = "Entrar",
             onClick = {
-                authViewModel.login {isFirstLogin ->
-                    if (isFirstLogin) {
-                        // Primeiro acesso: vai para o onboarding
-                        navController.navigate("onboarding_flow") {
-                            popUpTo("start_screen") { inclusive = true }
-                        }
-                    } else {
-                        // Usuário já completou onboarding: vai direto para a home
-                        navController.navigate("home") {
-                            popUpTo("start_screen") { inclusive = true }
-                        }
-                    }
+                // MUDANÇA 2: A lógica de navegação foi removida daqui
+                // A tela agora apenas chama o ViewModel e repassa o resultado para o callback
+                authViewModel.login { isFirstLogin ->
+                    onLoginSuccess(isFirstLogin)
                 }
             }
         )
@@ -77,7 +70,8 @@ fun LoginScreen(
             text = "Não possui uma conta?\nClique aqui para criar uma",
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
-            modifier = Modifier.clickable { navController.navigate("sign_up") }
+            // MUDANÇA 3: O clique agora chama o callback
+            modifier = Modifier.clickable { onNavigateToSignUp() }
         )
     }
 }

@@ -4,7 +4,7 @@ package com.example.challenge2025.domain.repository
 
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioRequestDto
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioResponseDto // Adicione este import
-import com.example.challenge2025.data.remote.dto.checkin.EstatisticaSentimentoResponseDto
+import com.example.challenge2025.data.remote.dto.sentimentos.EstatisticaSentimentoResponseDto
 import com.example.challenge2025.domain.util.Resource
 
 interface CheckinRepository {

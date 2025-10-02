@@ -10,7 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.challenge2025.model.dashboard.TimePeriod
+// MUDANÇA: Garantir que o import aponta para o modelo de domínio
+import com.example.challenge2025.domain.model.dashboard.TimePeriod
 
 @Composable
 fun DashboardHeader(
@@ -63,7 +64,7 @@ private fun PeriodButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val colors = if (isSelected) {
+    val buttonColors = if (isSelected) {
         ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
@@ -74,12 +75,23 @@ private fun PeriodButton(
         )
     }
 
-    OutlinedButton(
-        onClick = onClick,
-        modifier = modifier,
-        colors = colors,
-        border = if(isSelected) null else ButtonDefaults.outlinedButtonBorder
-    ) {
-        Text(text = text, fontSize = 12.sp)
+    // Usar Button em vez de OutlinedButton para o caso selecionado
+    if (isSelected) {
+        Button(
+            onClick = onClick,
+            modifier = modifier,
+            colors = buttonColors
+        ) {
+            Text(text = text, fontSize = 12.sp)
+        }
+    } else {
+        OutlinedButton(
+            onClick = onClick,
+            modifier = modifier,
+            colors = buttonColors,
+            border = ButtonDefaults.outlinedButtonBorder
+        ) {
+            Text(text = text, fontSize = 12.sp)
+        }
     }
 }

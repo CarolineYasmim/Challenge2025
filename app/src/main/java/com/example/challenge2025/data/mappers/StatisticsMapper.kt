@@ -3,7 +3,7 @@ package com.example.challenge2025.data.mappers
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Psychology
-import com.example.challenge2025.data.remote.dto.checkin.EstatisticaSentimentoResponseDto
+import com.example.challenge2025.data.remote.dto.sentimentos.EstatisticaSentimentoResponseDto
 import com.example.challenge2025.domain.model.statistics.CareDaysGoal
 import com.example.challenge2025.domain.model.statistics.MentalHealthSummary
 import com.example.challenge2025.domain.model.statistics.StatisticsSummary
