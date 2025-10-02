@@ -10,7 +10,7 @@ import com.example.challenge2025.domain.repository.AuthRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton // MUDANÇA 1: Garante que só haverá uma instância deste repositório no app
+@Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val api: ApiService // MUDANÇA 2: Recebemos a ApiService em vez de buscá-la do RetrofitInstance
 ) : AuthRepository { // MUDANÇA 3: Implementamos a interface
