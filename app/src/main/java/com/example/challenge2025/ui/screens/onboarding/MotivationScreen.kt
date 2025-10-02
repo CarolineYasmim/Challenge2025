@@ -16,7 +16,7 @@ import com.example.challenge2025.R
 import com.example.challenge2025.ui.components.auth.RoundedButton
 import com.example.challenge2025.ui.components.onboarding.SelectableCard
 import com.example.challenge2025.ui.components.onboarding.StepLayout
-import com.example.challenge2025.ui.viewmodel.UserViewModel
+import com.example.challenge2025.ui.viewmodel.user.UserViewModel
 
 @Composable
 fun MotivationScreen(

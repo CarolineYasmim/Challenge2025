@@ -8,7 +8,7 @@ data class TestItem(
     val description: String,
     val durationMinutes: Int,
     val status: TestStatus,
-    val category: TestCategory,
+    val category: String,
     val iconRes: Int,
     val lastResultDate: LocalDate? = null
 )
@@ -18,8 +18,4 @@ enum class TestStatus{
     DONE
 }
 
-enum class TestCategory{
-    USER,
-    COMPANY
-}
 

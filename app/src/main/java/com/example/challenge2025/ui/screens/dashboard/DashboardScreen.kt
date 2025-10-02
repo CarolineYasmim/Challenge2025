@@ -22,7 +22,7 @@ import com.example.challenge2025.ui.components.dashboard.Recommendations
 import com.example.challenge2025.ui.components.dashboard.RiskProfileCard
 import com.example.challenge2025.ui.components.dashboard.WellbeingPanel
 import com.example.challenge2025.ui.components.dashboard.PeriodFeelingCard
-import com.example.challenge2025.ui.viewmodel.DashboardViewModel
+import com.example.challenge2025.ui.viewmodel.dashboard.DashboardViewModel
 
 @Composable
 fun DashboardScreen(

@@ -1,4 +1,4 @@
-package com.example.challenge2025.ui.viewmodel
+package com.example.challenge2025.ui.viewmodel.auth
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel

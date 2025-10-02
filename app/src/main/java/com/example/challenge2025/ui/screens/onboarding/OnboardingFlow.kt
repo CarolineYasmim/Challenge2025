@@ -10,8 +10,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.challenge2025.ui.viewmodel.AuthViewModel
-import com.example.challenge2025.ui.viewmodel.UserViewModel
+import com.example.challenge2025.ui.viewmodel.auth.AuthViewModel
+import com.example.challenge2025.ui.viewmodel.user.UserViewModel
 
 
 @Composable

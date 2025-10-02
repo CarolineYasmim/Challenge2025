@@ -32,12 +32,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.challenge2025.model.data.MockData
-import com.example.challenge2025.model.tests.Question
-import com.example.challenge2025.model.user.UserAnswer
-import com.example.challenge2025.model.user.UserTestResult
+import com.example.challenge2025.domain.model.user.UserTestResult
 import com.example.challenge2025.ui.components.assets.BackButton
-import com.example.challenge2025.ui.viewmodel.TestViewModel
+import com.example.challenge2025.ui.viewmodel.test.TestViewModel
 
 @Composable
 fun TestQuestionScreen(
@@ -48,7 +45,6 @@ fun TestQuestionScreen(
     viewModel: TestViewModel = viewModel(),
     onFinishTest: (result: UserTestResult) -> Unit
 ) {
-    val questions: List<Question> = MockData.getQuestionsForTest(testId)
     if (questionIndex >= questions.size) return
     val question = questions[questionIndex]
 

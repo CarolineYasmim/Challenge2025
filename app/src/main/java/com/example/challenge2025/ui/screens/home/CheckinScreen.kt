@@ -30,7 +30,7 @@ import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.challenge2025.model.checkin.Feeling
 import com.example.challenge2025.domain.util.Resource
-import com.example.challenge2025.ui.viewmodel.CheckinViewModel
+import com.example.challenge2025.ui.viewmodel.home.CheckinViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale

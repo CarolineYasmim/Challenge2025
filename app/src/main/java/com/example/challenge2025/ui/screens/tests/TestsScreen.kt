@@ -1,6 +1,5 @@
 package com.example.challenge2025.ui.screens.tests
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,17 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.challenge2025.R
-import com.example.challenge2025.domain.model.tests.TestCategory
 import com.example.challenge2025.domain.model.tests.TestItem
 import com.example.challenge2025.domain.util.Resource
 import com.example.challenge2025.ui.components.assets.Header
 import com.example.challenge2025.ui.components.tests.BannerCarousel
 import com.example.challenge2025.ui.components.tests.TestListContainer
-import com.example.challenge2025.ui.viewmodel.TestViewModel
-import com.example.challenge2025.ui.viewmodel.UserViewModel
+import com.example.challenge2025.ui.viewmodel.test.TestViewModel
+import com.example.challenge2025.ui.viewmodel.user.UserViewModel
 
 @Composable
-fun    TestsScreen(
+fun TestsScreen(
     onTestClick: (TestItem) -> Unit,
     userViewModel: UserViewModel = hiltViewModel(),
     testViewModel: TestViewModel = hiltViewModel()
@@ -45,46 +43,30 @@ fun    TestsScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         Header(title = "Testes", user = currentUser)
-        BannerCarousel(bannerImages = listOf(
-            R.drawable.banner1,
-            R.drawable.banner2,
-            R.drawable.banner3
-        ))
+        BannerCarousel(
+            bannerImages = listOf(
+                R.drawable.banner1, R.drawable.banner2, R.drawable.banner3
+            )
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         when (val state = testsState) {
             is Resource.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
             is Resource.Success -> {
                 val allTests = state.data ?: emptyList()
-                val userTests = allTests.filter { it.category == TestCategory.USER }
-                val companyTests = allTests.filter { it.category == TestCategory.COMPANY }
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)
-                ) {
-                    if (userTests.isNotEmpty()) {
-                        TestListContainer(
-                            title = "Para você",
-                            tests = userTests,
-                            onTestClick = onTestClick
-                        )
-                    }
-                    if (companyTests.isNotEmpty()) {
-                        TestListContainer(
-                            title = "Da empresa para o seu cuidado",
-                            tests = companyTests,
-                            onTestClick = onTestClick
-                        )
-                    }
+                // MUDANÇA: Não há mais separação. Usamos um único TestListContainer.
+                if (allTests.isNotEmpty()) {
+                    TestListContainer(
+                        title = "Testes Disponíveis",
+                        tests = allTests,
+                        onTestClick = onTestClick
+                    )
                 }
             }
             is Resource.Error -> {

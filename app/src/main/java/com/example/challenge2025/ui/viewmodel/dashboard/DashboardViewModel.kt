@@ -1,4 +1,4 @@
-package com.example.challenge2025.ui.viewmodel
+package com.example.challenge2025.ui.viewmodel.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

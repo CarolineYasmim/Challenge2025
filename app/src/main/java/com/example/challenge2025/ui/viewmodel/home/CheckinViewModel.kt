@@ -1,9 +1,8 @@
 // ViewModel/CheckinViewModel.kt
-package com.example.challenge2025.ui.viewmodel
+package com.example.challenge2025.ui.viewmodel.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.challenge2025.R
 import com.example.challenge2025.data.mappers.toDomainModel
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioRequestDto
 import com.example.challenge2025.domain.model.checkin.CalendarWeek

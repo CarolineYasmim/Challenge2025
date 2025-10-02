@@ -95,8 +95,10 @@ fun TestCard(
                         color = MaterialTheme.colorScheme.error
                     )
                 } else {
+                    val dateText = testItem.lastResultDate
+                        ?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: "Concluído"
                     Text(
-                        text = "Último resultado: 12/09/2025",
+                        text = "Último resultado: $dateText",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -109,38 +111,14 @@ fun TestCard(
                 )
             }
 
-            if (testItem.status == TestStatus.TODO) {
-                Text(
-                    text = "A fazer",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error
-                )
-            } else {
-                // Formata a data que vem do TestItem para "dd/MM/yyyy"
-                // Se a data for nula por algum motivo, mostra "Concluído"
-                val dateText = testItem.lastResultDate
-                    ?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: "Concluído"
-                Text(
-                    text = "Último resultado: $dateText",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
+            if (testItem.status == TestStatus.DONE) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = "Feito",
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(24.dp)
                 )
             }
-
-            Text(
-                text = "${testItem.durationMinutes} min",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-            )
-        }
-
-        if (testItem.status == TestStatus.DONE) {
-            Icon(
-                imageVector = Icons.Default.CheckCircle,
-                contentDescription = "Feito",
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(24.dp)
-            )
         }
     }
 }

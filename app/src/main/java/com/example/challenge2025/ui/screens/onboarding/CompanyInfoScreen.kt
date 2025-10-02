@@ -23,7 +23,7 @@ import androidx.navigation.NavController
 import com.example.challenge2025.ui.components.auth.RoundedButton
 import com.example.challenge2025.ui.components.onboarding.StepLayout
 import com.example.challenge2025.ui.theme.Blue
-import com.example.challenge2025.ui.viewmodel.UserViewModel
+import com.example.challenge2025.ui.viewmodel.user.UserViewModel
 
 @Composable
 fun CompanyInfoScreen(
