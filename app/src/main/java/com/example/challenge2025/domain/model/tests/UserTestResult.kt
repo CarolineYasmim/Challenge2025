@@ -1,4 +1,4 @@
-package com.example.challenge2025.domain.model.user
+package com.example.challenge2025.domain.model.tests
 
 data class UserTestResult(
     val testId: String,

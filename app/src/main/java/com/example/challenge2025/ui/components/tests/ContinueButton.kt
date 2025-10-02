@@ -19,6 +19,7 @@ import com.example.challenge2025.ui.theme.Green
 fun ContinueButton(
     modifier: Modifier = Modifier,
     text: String = "Continuar",
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     val isLight = !isSystemInDarkTheme()
@@ -26,6 +27,7 @@ fun ContinueButton(
 
     Button(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier
             .fillMaxWidth()
             .height(60.dp),

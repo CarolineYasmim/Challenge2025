@@ -7,6 +7,8 @@ import com.example.challenge2025.data.remote.dto.auth.RegisterRequest
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioRequestDto
 import com.example.challenge2025.data.remote.dto.checkin.CheckInDiarioResponseDto
 import com.example.challenge2025.data.remote.dto.checkin.EstatisticaSentimentoResponseDto
+import com.example.challenge2025.data.remote.dto.test.ResultadoRequestDto
+import com.example.challenge2025.data.remote.dto.test.ResultadoResponseDto
 import com.example.challenge2025.data.remote.dto.test.TentativaRequestDto
 import com.example.challenge2025.data.remote.dto.test.TentativaResponseDto
 import com.example.challenge2025.data.remote.dto.user.UsuarioRequestDto
@@ -50,5 +52,9 @@ interface ApiService {
 
     @POST("/api/tentativas")
     suspend fun startOrUpdateAttempt(@Body request: TentativaRequestDto): Response<TentativaResponseDto>
+
+    @POST("/api/resultados")
+    suspend fun submitTestResult(@Body resultRequest: ResultadoRequestDto): Response<ResultadoResponseDto>
+
 
 }

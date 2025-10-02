@@ -9,15 +9,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.example.challenge2025.domain.util.Resource
 import com.example.challenge2025.ui.components.assets.BottomBar
 import com.example.challenge2025.ui.screens.menu.MenuScreen
 import com.example.challenge2025.ui.screens.auth.LoginScreen
@@ -35,6 +38,7 @@ import com.example.challenge2025.ui.screens.tests.TestsScreen
 import com.example.challenge2025.ui.theme.Challenge2025Theme
 import com.example.challenge2025.ui.viewmodel.user.UserViewModel
 import com.example.challenge2025.ui.viewmodel.home.CheckinViewModel
+import com.example.challenge2025.ui.viewmodel.test.TestResultViewModel
 import com.example.challenge2025.ui.viewmodel.test.TestViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -83,7 +87,10 @@ class MainActivity : ComponentActivity() {
 
 
 
-                            navigation(startDestination = "onboarding_welcome", route = "onboarding_route") {
+                            navigation(
+                                startDestination = "onboarding_welcome",
+                                route = "onboarding_route"
+                            ) {
                                 composable("onboarding_welcome") {
                                     WelcomeScreen(navController = navController)
                                 }
@@ -115,7 +122,9 @@ class MainActivity : ComponentActivity() {
 
                             /** Rotas internas **/
                             composable("checkin/{date}") { backStackEntry ->
-                                val dateString = backStackEntry.arguments?.getString("date") ?: LocalDate.now().toString()
+                                val dateString =
+                                    backStackEntry.arguments?.getString("date") ?: LocalDate.now()
+                                        .toString()
                                 val date = LocalDate.parse(dateString)
                                 CheckinScreen(
                                     date = date,
@@ -134,7 +143,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("testQuestion/{testId}/{questionIndex}") { backStackEntry ->
                                 val testId = backStackEntry.arguments?.getString("testId") ?: ""
-                                val questionIndex = backStackEntry.arguments?.getString("questionIndex")?.toInt() ?: 0
+                                val questionIndex =
+                                    backStackEntry.arguments?.getString("questionIndex")?.toInt()
+                                        ?: 0
 
                                 TestQuestionScreen(
                                     testId = testId,
@@ -143,27 +154,45 @@ class MainActivity : ComponentActivity() {
                                     onNextQuestion = { nextIndex ->
                                         navController.navigate("testQuestion/$testId/$nextIndex")
                                     },
-                                    onExit = { navController.popBackStack("tests", inclusive = false) },
+                                    onExit = {
+                                        navController.popBackStack(
+                                            "tests",
+                                            inclusive = false
+                                        )
+                                    },
                                     onFinishTest = { result ->
                                         testViewModel.markTestAsDone(result.testId)
                                         navController.navigate("testResult/${result.testId}")
                                     }
                                 )
                             }
-                            composable("testResult/{testId}") { backStackEntry ->
-                                val testId = backStackEntry.arguments?.getString("testId") ?: ""
-                                val result = testViewModel.lastResult
 
-                                if (result != null && result.testId == testId) {
-                                    TestResultScreen(
-                                        result = result,
-                                        timeSpentMillis = 60000L,
-                                        onSupportClick = { /* suporte */ },
-                                        onMoreInfoClick = { /* info */ },
-                                        onContinue = {
-                                            navController.popBackStack("tests", inclusive = false)
-                                        }
+                            composable("testResult") {
+                                val viewModel: TestResultViewModel = hiltViewModel()
+                                val state by viewModel.resultState.collectAsState()
+
+                                when (state) {
+                                    is Resource.Loading -> LoadingScreen()
+                                    is Resource.Error -> ErrorScreen(
+                                        (state as Resource.Error).message
+                                            ?: "Erro ao carregar resultado"
                                     )
+
+                                    is Resource.Success -> {
+                                        val result = (state as Resource.Success).data!!
+                                        TestResultScreen(
+                                            result = result,
+                                            timeSpentMillis = 60000L, // pode calcular no TestQuestion e passar via SavedStateHandle
+                                            onSupportClick = { /* suporte */ },
+                                            onMoreInfoClick = { /* info */ },
+                                            onContinue = {
+                                                navController.popBackStack(
+                                                    "tests",
+                                                    inclusive = false
+                                                )
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }

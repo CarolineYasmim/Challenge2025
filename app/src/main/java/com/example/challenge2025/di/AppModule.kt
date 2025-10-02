@@ -8,9 +8,13 @@ import com.example.challenge2025.domain.repository.AuthRepository
 import com.example.challenge2025.data.repository.AuthRepositoryImpl
 import com.example.challenge2025.domain.repository.CheckinRepository
 import com.example.challenge2025.data.repository.CheckinRepositoryImpl
+import com.example.challenge2025.data.repository.ResultRepositoryImpl
+import com.example.challenge2025.data.repository.TestAttemptRepositoryImpl
 import com.example.challenge2025.data.repository.TestRepositoryImpl
 import com.example.challenge2025.domain.repository.UserRepository
 import com.example.challenge2025.data.repository.UserRepositoryImpl
+import com.example.challenge2025.domain.repository.ResultRepository
+import com.example.challenge2025.domain.repository.TestAttemptRepository
 import com.example.challenge2025.domain.repository.TestRepository
 import dagger.Binds
 import dagger.Module
@@ -46,6 +50,14 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindTestRepository(impl: TestRepositoryImpl): TestRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTestAttemptRepository(impl: TestAttemptRepositoryImpl): TestAttemptRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindResultRepository(impl: ResultRepositoryImpl): ResultRepository
 
 
     // Usamos um companion object para as funções @Provides, que constroem objetos

@@ -1,17 +1,18 @@
-
 package com.example.challenge2025.data.remote.dto.test
 
 import com.google.gson.annotations.SerializedName
 
+// DTO para ENVIAR o resultado final
 data class ResultadoRequestDto(
     @SerializedName("testeId")
     val testId: String,
 
     @SerializedName("respostas")
-    val answers: List<RespostaUsuarioResponseDto>
+    val answers: List<RespostaUsuarioRequestDto>
 )
 
-data class RespostaUsuarioResponseDto(
+// DTO aninhado para cada resposta na requisição final
+data class RespostaUsuarioRequestDto(
     @SerializedName("perguntaId")
     val questionId: String,
 
@@ -25,6 +26,7 @@ data class RespostaUsuarioResponseDto(
     val value: Int
 )
 
+// DTO para RECEBER a resposta com o resultado calculado
 data class ResultadoResponseDto(
     @SerializedName("id")
     val id: String,
@@ -49,4 +51,19 @@ data class ResultadoResponseDto(
 
     @SerializedName("respostas")
     val answers: List<RespostaUsuarioResponseDto>
+)
+
+// DTO aninhado para cada resposta na resposta final
+data class RespostaUsuarioResponseDto(
+    @SerializedName("perguntaId")
+    val questionId: String,
+
+    @SerializedName("perguntaTexto")
+    val questionText: String,
+
+    @SerializedName("respostaSelecionada")
+    val selectedAnswerText: String,
+
+    @SerializedName("valorAtribuido")
+    val value: Int
 )

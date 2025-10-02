@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class TesteResponseDto(
     @SerializedName("id") val id: String,
-    @SerializedName("tipo") val type: String, // ex: "USER", "COMPANY"
+    @SerializedName("tipo") val type: String,
     @SerializedName("titulo") val title: String,
     @SerializedName("descricao") val description: String,
     @SerializedName("tempoEstimadoMinutos") val durationMinutes: Int,
@@ -12,6 +12,7 @@ data class TesteResponseDto(
 )
 
 data class PerguntaResponseDto(
+    @SerializedName("id") val id: String?,
     @SerializedName("texto") val text: String,
     @SerializedName("opcoes") val options: List<OpcaoRespostaResponseDto>
 )

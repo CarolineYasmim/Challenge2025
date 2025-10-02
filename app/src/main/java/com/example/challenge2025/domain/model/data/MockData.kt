@@ -1,7 +1,6 @@
 package com.example.challenge2025.domain.model.data
 
 import com.example.challenge2025.R
-import com.example.challenge2025.domain.model.tests.Question
 
 
 object MockData {

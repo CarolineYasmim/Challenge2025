@@ -1,5 +1,7 @@
 package com.example.challenge2025.data.remote.dto.checkin
 
+import com.google.gson.annotations.SerializedName
+
 data class DetalheSentimentoDto(
     @SerializedName("sentimento")
     val feeling: String,

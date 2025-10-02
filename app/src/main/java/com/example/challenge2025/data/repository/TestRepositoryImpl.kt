@@ -3,7 +3,9 @@
 package com.example.challenge2025.data.repository
 
 import com.example.challenge2025.data.mappers.toDomainModel
+import com.example.challenge2025.data.mappers.toTestDetailModel
 import com.example.challenge2025.data.remote.ApiService
+import com.example.challenge2025.domain.model.tests.TestDetail
 import com.example.challenge2025.domain.model.tests.TestItem
 import com.example.challenge2025.domain.repository.TestRepository
 import com.example.challenge2025.domain.util.Resource
@@ -46,6 +48,21 @@ class TestRepositoryImpl @Inject constructor(
                 Resource.Success(finalList)
             } else {
                 Resource.Error("Erro ao buscar dados dos testes.")
+            }
+        } catch (e: Exception) {
+            Resource.Error("Falha na conexão: ${e.message}")
+        }
+    }
+
+    override suspend fun getTestDetails(testId: String): Resource<TestDetail> {
+        return try {
+            val response = apiService.getTestDetails(testId)
+            if (response.isSuccessful && response.body() != null) {
+                // Usa o tradutor específico para os detalhes do teste
+                val testDetail = response.body()!!.toTestDetailModel()
+                Resource.Success(testDetail)
+            } else {
+                Resource.Error("Erro ao buscar detalhes do teste: ${response.message()}")
             }
         } catch (e: Exception) {
             Resource.Error("Falha na conexão: ${e.message}")

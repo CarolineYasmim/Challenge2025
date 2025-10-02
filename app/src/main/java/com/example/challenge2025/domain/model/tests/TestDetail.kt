@@ -6,5 +6,7 @@ data class TestDetail(
     val name: String,
     val description: String,
     val totalQuestions: Int,
-    val durationMinutes: Int
+    val durationMinutes: Int,
+    val questions: List<Question>
+
 )
