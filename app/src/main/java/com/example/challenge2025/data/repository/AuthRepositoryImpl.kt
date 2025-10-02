@@ -1,4 +1,4 @@
-// ARQUIVO MODIFICADO: repository/AuthRepositoryImpl.kt
+
 
 package com.example.challenge2025.data.repository
 
