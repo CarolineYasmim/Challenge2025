@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.challenge2025.model.bottom.BottomNavItem
+import com.example.challenge2025.domain.model.bottom.BottomNavItem
 import com.example.challenge2025.ui.theme.Blue
 import com.example.challenge2025.ui.theme.GrayLight
 import com.example.challenge2025.ui.theme.Green

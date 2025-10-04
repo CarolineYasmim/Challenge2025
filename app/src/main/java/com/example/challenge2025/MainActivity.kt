@@ -32,8 +32,6 @@ import com.example.challenge2025.ui.screens.dashboard.DashboardScreen
 import com.example.challenge2025.ui.screens.home.CheckinScreen
 import com.example.challenge2025.ui.screens.home.HomeScreen
 import com.example.challenge2025.ui.screens.menu.MenuScreen
-import com.example.challenge2025.ui.screens.onboarding.OnboardingFlow
-import com.example.challenge2025.ui.screens.onboarding.WelcomeScreen
 import com.example.challenge2025.ui.screens.tests.TestDescriptionScreen
 import com.example.challenge2025.ui.screens.tests.TestQuestionScreen
 import com.example.challenge2025.ui.screens.tests.TestResultScreen
@@ -55,125 +53,126 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
-                    val mainAppRoutes = listOf("home", "tests", "dashboard", "menu")
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentRoute = navBackStackEntry?.destination?.route
+                    AppNavigation()
+                }
+            }
+        }
+    }
+}
 
-                    Scaffold(
-                        bottomBar = {
-                            if (currentRoute in mainAppRoutes) {
-                                BottomBar(navController = navController)
-                            }
-                        }
-                    ) { innerPadding ->
-                        NavHost(
-                            navController = navController,
-                            startDestination = "start_screen",
-                            modifier = Modifier.padding(innerPadding)
-                        ) {
-                            composable("start_screen") {
-                                StartScreen(
-                                    onLoginClick = { navController.navigate("login") },
-                                    onSignUpClick = { navController.navigate("sign_up") }
-                                )
-                            }
-                            composable("login") {
-                                LoginScreen(
-                                    onNavigateToSignUp = { navController.navigate("sign_up") },
-                                    onLoginSuccess = { isFirstLogin ->
-                                        val destination = if (isFirstLogin) "onboarding_route" else "home"
-                                        navController.navigate(destination) {
-                                            popUpTo("start_screen") { inclusive = true }
-                                        }
-                                    }
-                                )
-                            }
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
+    val mainAppRoutes = listOf("home", "tests", "dashboard", "menu")
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-                            composable("sign_up") {
-                                SignUpScreen(
-                                    onSignUpSuccess = { navController.navigate("login") }
-                                )
-                            }
-
-                            navigation(
-                                startDestination = "onboarding_welcome",
-                                route = "onboarding_route"
-                            ) {
-                                composable("onboarding_welcome") { WelcomeScreen(navController) }
-                                composable("onboarding_flow") { OnboardingFlow(navController) }
-                            }
-
-                            composable("home") { HomeScreen(navController) }
-                            composable("tests") {
-                                TestsScreen(
-                                    onTestClick = { testItem ->
-                                        navController.navigate("test_flow/${testItem.id}")
-                                    }
-                                )
-                            }
-                            composable("dashboard") { DashboardScreen() }
-                            composable("menu") {
-                                MenuScreen(
-                                    onNavigateToPersonalData = { /* navController.navigate("personal_data_route") */ },
-                                    onNavigateToCompanyData = { /* navController.navigate("company_data_route") */ },
-                                    onNavigateToLanguage = { /* navController.navigate("language_route") */ },
-                                    onNavigateToHelpCenter = { /* navController.navigate("help_center_route") */ },
-                                    onLogout = {
-                                        navController.navigate("start_screen") {
-                                            popUpTo(0)
-                                        }
-                                    }
-                                )
-                            }
-                            composable("checkin/{date}") { backStackEntry ->
-                                val dateString = backStackEntry.arguments?.getString("date")
-                                val date = if (dateString != null) LocalDate.parse(dateString) else LocalDate.now()
-
-                                CheckinScreen(
-                                    date = date,
-                                    onClose = { navController.popBackStack() },
-                                    onSubmit = { navController.popBackStack() }
-                                )
-                            }
-
-
-                            navigation(
-                                route = "test_flow/{testId}",
-                                startDestination = "testDescription/{testId}"
-                            ) {
-                                composable("testDescription/{testId}") { backStackEntry ->
-                                    val testId = backStackEntry.arguments?.getString("testId")
-                                    TestDescriptionScreen(
-                                        onExit = { navController.popBackStack() },
-                                        onStartTest = {
-                                            navController.navigate("testQuestion/$testId")
-                                        }
-                                    )
-                                }
-                                composable("testQuestion/{testId}") { backStackEntry ->
-                                    val viewModel = backStackEntry.sharedViewModel<TestInProgressViewModel>(navController)
-                                    TestQuestionScreen(
-                                        navController = navController,
-                                        viewModel = viewModel
-                                    )
-                                }
-                                composable("testResult/{testId}") { backStackEntry ->
-                                    val viewModel = backStackEntry.sharedViewModel<TestInProgressViewModel>(navController)
-                                    TestResultScreen(
-                                        viewModel = viewModel,
-                                        onContinue = {
-                                            navController.navigate("home") { // Volta para a home
-                                                popUpTo(navController.graph.findStartDestination().id) {
-                                                    inclusive = true
-                                                }
-                                            }
-                                        }
-                                    )
-                                }
-                            }
+    Scaffold(
+        bottomBar = {
+            if (currentRoute in mainAppRoutes) {
+                BottomBar(navController = navController)
+            }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "start_screen",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("start_screen") {
+                StartScreen(
+                    onLoginClick = { navController.navigate("login") },
+                    onSignUpClick = { navController.navigate("signup") }
+                )
+            }
+            composable("login") {
+                LoginScreen(
+                    onNavigateToSignUp = { navController.navigate("signup") },
+                    onLoginSuccess = {
+                        navController.navigate("home") {
+                            popUpTo("start_screen") { inclusive = true }
                         }
                     }
+                )
+            }
+
+            composable("signup") {
+                SignUpScreen(
+                    onSignUpSuccess = {
+                        navController.navigate("login") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
+                )
+            }
+
+            composable("home") { HomeScreen(navController) }
+            composable("tests") {
+                TestsScreen(
+                    onTestClick = { testItem ->
+                        navController.navigate("test_flow/${testItem.id}")
+                    }
+                )
+            }
+            composable("dashboard") { DashboardScreen() }
+            composable("menu") {
+                MenuScreen(
+                    onNavigateToPersonalData = {},
+                    onNavigateToCompanyData = {},
+                    onNavigateToLanguage = {},
+                    onNavigateToHelpCenter = {},
+                    onLogout = {
+                        navController.navigate("start_screen") {
+                            popUpTo(0)
+                        }
+                    }
+                )
+            }
+            composable("checkin/{date}") { backStackEntry ->
+                val dateString = backStackEntry.arguments?.getString("date")
+                val date = if (dateString != null) LocalDate.parse(dateString) else LocalDate.now()
+
+                CheckinScreen(
+                    date = date,
+                    onClose = { navController.popBackStack() },
+                    onSubmit = { navController.popBackStack() }
+                )
+            }
+
+            navigation(
+                route = "test_flow/{testId}",
+                startDestination = "testDescription/{testId}"
+            ) {
+                composable("testDescription/{testId}") { backStackEntry ->
+                    val testId = backStackEntry.arguments?.getString("testId") ?: ""
+                    TestDescriptionScreen(
+                        onExit = { navController.popBackStack() },
+                        onStartTest = { // <-- SEM PARÂMETROS AQUI
+                            // Usa o 'testId' definido na linha acima
+                            navController.navigate("testQuestion/$testId")
+                        }
+                    )
+                }
+
+                composable("testQuestion/{testId}") { backStackEntry ->
+                    val viewModel = backStackEntry.sharedViewModel<TestInProgressViewModel>(navController)
+                    TestQuestionScreen(
+                        navController = navController,
+                        viewModel = viewModel
+                    )
+                }
+                composable("testResult/{testId}") { backStackEntry ->
+                    val viewModel = backStackEntry.sharedViewModel<TestInProgressViewModel>(navController)
+                    TestResultScreen(
+                        viewModel = viewModel,
+                        onContinue = {
+                            navController.navigate("home") {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }

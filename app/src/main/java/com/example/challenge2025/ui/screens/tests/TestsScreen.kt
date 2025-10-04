@@ -25,7 +25,7 @@ import com.example.challenge2025.ui.components.assets.Header
 import com.example.challenge2025.ui.components.tests.BannerCarousel
 import com.example.challenge2025.ui.components.tests.TestListContainer
 import com.example.challenge2025.ui.viewmodel.test.TestViewModel
-import com.example.challenge2025.ui.viewmodel.user.UserViewModel
+import com.example.challenge2025.ui.viewmodel.auth.UserViewModel
 
 @Composable
 fun TestsScreen(

@@ -32,9 +32,9 @@ import com.example.challenge2025.ui.components.menu.ProfileHeader
 import com.example.challenge2025.ui.components.menu.SettingItem
 import com.example.challenge2025.ui.components.menu.SettingType
 import com.example.challenge2025.ui.components.menu.SettingsGroup
-import com.example.challenge2025.ui.viewmodel.user.AuthViewModel
+import com.example.challenge2025.ui.viewmodel.auth.AuthViewModel
 import com.example.challenge2025.ui.viewmodel.menu.MenuViewModel
-import com.example.challenge2025.ui.viewmodel.user.UserViewModel
+import com.example.challenge2025.ui.viewmodel.auth.UserViewModel
 
 @Composable
 fun MenuScreen(

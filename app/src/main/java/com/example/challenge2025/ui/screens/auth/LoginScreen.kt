@@ -2,6 +2,7 @@ package com.example.challenge2025.ui.screens.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,7 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.challenge2025.ui.components.auth.AuthScreenLayout
 import com.example.challenge2025.ui.components.auth.AuthTextField
 import com.example.challenge2025.ui.components.auth.RoundedButton
-import com.example.challenge2025.ui.viewmodel.user.AuthViewModel
+import com.example.challenge2025.ui.viewmodel.auth.AuthViewModel
 
 @Composable
 fun LoginScreen(
@@ -37,7 +38,8 @@ fun LoginScreen(
             value = state.email,
             onValueChange = authViewModel::onEmailChange,
             label = "E-mail",
-            isError = state.emailError.isNotEmpty(),
+            // CORREÇÃO APLICADA AQUI
+            isError = !state.emailError.isNullOrEmpty(),
             errorMessage = state.emailError,
             keyboardType = KeyboardType.Email
         )
@@ -46,7 +48,8 @@ fun LoginScreen(
             value = state.password,
             onValueChange = authViewModel::onPasswordChange,
             label = "Senha",
-            isError = state.passwordError.isNotEmpty(),
+            // CORREÇÃO APLICADA AQUI
+            isError = !state.passwordError.isNullOrEmpty(),
             errorMessage = state.passwordError,
             keyboardType = KeyboardType.Password
         )
@@ -54,11 +57,13 @@ fun LoginScreen(
 
         RoundedButton(
             text = "Entrar",
+            enabled = !state.isLoading,
             onClick = {
-                 authViewModel.login { isFirstLogin ->
+                authViewModel.login { isFirstLogin ->
                     onLoginSuccess(isFirstLogin)
                 }
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(24.dp))

@@ -25,7 +25,7 @@ import com.example.challenge2025.ui.components.home.CheckinHistory
 import com.example.challenge2025.ui.components.home.WeeklyCalendar
 import com.example.challenge2025.ui.components.home.WeeklyGoals
 import com.example.challenge2025.ui.viewmodel.home.CalendarViewModel
-import com.example.challenge2025.ui.viewmodel.user.UserViewModel
+import com.example.challenge2025.ui.viewmodel.auth.UserViewModel
 
 @Composable
 fun HomeScreen(

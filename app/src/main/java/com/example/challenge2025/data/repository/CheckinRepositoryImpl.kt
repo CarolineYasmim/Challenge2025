@@ -42,7 +42,7 @@ class CheckinRepositoryImpl @Inject constructor(
 
     override suspend fun getCheckinStatistics(days: Int): Resource<EstatisticaSentimentoResponseDto> {
         return try {
-            val response = apiService.getCheckinStatistics()
+            val response = apiService.getCheckinStatistics(days)
             if (response.isSuccessful && response.body() != null) {
                 Resource.Success(response.body())
             } else {

@@ -12,8 +12,6 @@ import com.example.challenge2025.data.repository.CheckinRepositoryImpl
 import com.example.challenge2025.data.repository.ResultRepositoryImpl
 import com.example.challenge2025.data.repository.TestAttemptRepositoryImpl
 import com.example.challenge2025.data.repository.TestRepositoryImpl
-import com.example.challenge2025.domain.repository.UserRepository
-import com.example.challenge2025.data.repository.UserRepositoryImpl
 import com.example.challenge2025.domain.repository.ResultRepository
 import com.example.challenge2025.domain.repository.TestAttemptRepository
 import com.example.challenge2025.domain.repository.TestRepository
